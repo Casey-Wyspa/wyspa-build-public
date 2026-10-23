@@ -100,6 +100,16 @@ html,body{margin:0;background:#eef2f3}
 .wb .ct .v{font:500 18px var(--m);color:var(--ink)}
 .wb .trap{position:absolute;left:-9999px}
 .wb .paid{margin:0 0 24px;padding:10px 12px;border-left:3px solid var(--signal);background:#fff}
+.wb .need{border-left-color:#a3361f}
+.wb .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wb .rq{font-size:15px;color:var(--ink);margin-top:8px}
+.wb.pbar{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px;background:var(--sheet);border-top:1.5px solid var(--ink);display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 12px rgba(13,36,48,.12)}
+.wb.pbar .bt{min-width:0;display:grid;gap:2px}
+.wb.pbar b{font:800 22px/1.1 var(--d);font-stretch:125%}
+.wb.pbar span{font-size:13px;line-height:1.3;color:var(--muted);overflow-wrap:anywhere}
+.wb.pbar a{flex:none;font:600 14px var(--b);white-space:nowrap}
+.wb.pbar[hidden]{display:none}
+@media (min-width:821px){.wb.pbar{display:none!important}}
 @media (max-width:820px){
  .wb .hero,.wb .sh,.wb .caps,.wb .qt{grid-template-columns:minmax(0,1fr)}
  .wb .est{position:static}
@@ -195,15 +205,40 @@ html,body{margin:0;background:#eef2f3}
      <label class="full">Outline file (optional)<input name="dxf" type="file" accept=".dxf"><span class="hint" id="dxfmsg">Add a DXF and we read the outline and holes. Or type the sizes below.</span><button type="button" class="link" id="nodxf" hidden>Type the sizes instead</button></label>
      <label>Length<input name="pL" value="600"><span class="hint" data-for="pL">mm or in. Up to 2390 mm.</span></label>
      <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm.</span></label>
-     <label>Thickness<input name="pT" value="2"><span class="hint" data-for="pT">mm or in, total.</span></label>
+     <label id="tL">Thickness<input name="pT" value="2"><span class="hint" data-for="pT">mm or in, total.</span></label>
      <label>Material<select name="pMat">
       <option value="carbon">Carbon fiber</option>
       <option value="prepreg">Carbon prepreg</option>
       <option value="glass">Fiberglass</option>
       <option value="hybrid">Carbon and glass</option>
      </select></label>
-     <label>Foam core<select name="pCore"><option value="solid">No, solid</option><option value="core">Yes, foam in the middle</option></select></label>
-     <label id="skinL" hidden>Outer layers, each side<input name="pSkin" value="1 mm"><span class="hint" data-for="pSkin">Thickness of each skin on the foam.</span></label>
+     <label>Core<select name="pCore">
+      <option value="solid">None, solid panel</option>
+      <option value="WB-SAN80">SAN foam 80 kg/m³, standard</option>
+      <option value="WB-SAN130">SAN foam 130 kg/m³, for threaded inserts</option>
+      <option value="WB-SAN200">SAN foam 200 kg/m³, for bolts and heavy loads</option>
+      <option value="WB-HC48">Honeycomb, lightest</option>
+     </select></label>
+     <label id="coreTL" hidden>Core thickness<select name="pCoreT">
+      <option value="6.35">6 mm (1/4 in)</option>
+      <option value="9.5">10 mm (3/8 in)</option>
+      <option value="12.7" selected>12 mm (1/2 in)</option>
+      <option value="15.9">16 mm (5/8 in)</option>
+      <option value="19.05">19 mm (3/4 in)</option>
+      <option value="25.4">25 mm (1 in)</option>
+     </select><span class="hint" id="totT"></span></label>
+     <label id="skinL" hidden>Skins, each side<select name="pSkin">
+      <option value="0.5">0.5 mm</option>
+      <option value="0.75">0.75 mm</option>
+      <option value="1" selected>1 mm</option>
+      <option value="1.5">1.5 mm</option>
+      <option value="2">2 mm</option>
+     </select></label>
+     <label id="edgeL" hidden>Edges<select name="pEdge">
+      <option value="trimmed">Cut square, core sealed</option>
+      <option value="ramp30">30° ramp to a solid edge</option>
+      <option value="edge_band">Solid edge band</option>
+     </select><span class="hint" id="edgeH"></span></label>
      <label>Finish<select name="pFin">
       <option value="matte">Matte</option>
       <option value="gloss">Gloss one side</option>
@@ -212,6 +247,7 @@ html,body{margin:0;background:#eef2f3}
      <label>Holes and cutouts per panel<input name="pHoles" type="number" min="0" step="1" value="0"></label>
     </fieldset>
     <fieldset id="of" hidden>
+     <label class="full">Overall size: length × width × height<span class="row3"><input name="oL" placeholder="L" aria-label="Length"><input name="oW" placeholder="W" aria-label="Width"><input name="oH" placeholder="H" aria-label="Height"></span><span class="hint" id="oHint">mm or in, like 500 mm or 20 in. Rough is fine.</span></label>
      <label>Material<select name="mat">
       <option>Not sure, you choose</option>
       <option>Carbon fiber</option>
@@ -228,20 +264,22 @@ html,body{margin:0;background:#eef2f3}
     <div class="note" style="margin-top:0" id="per"></div>
     <div class="note" id="props"></div>
     <details id="more" hidden><summary>More calculated properties</summary><dl id="dl"></dl></details>
+    <div class="warn need" id="needw"></div>
     <div class="warn" id="warn"></div>
+    <p class="note" id="fnotes"></p>
     <p class="note" id="estnote">Shipping not included. This is a budget estimate. We check every part before we start, and the price may change after that check.</p>
    </aside>
   </div>
 
   <div class="send" id="send">
-   <h3>Send it</h3>
-   <fieldset>
+   <h3 id="sendH">Send it</h3>
+   <fieldset id="sf">
     <label>Name<input name="name" autocomplete="name" required></label>
     <label>Email<input name="email" type="email" autocomplete="email" required></label>
     <label>Company (optional)<input name="org" autocomplete="organization"></label>
-    <label>Need by (optional)<input name="need" type="date"></label>
-    <label class="full">Notes<textarea name="notes" rows="4" placeholder="What it's for, loads, weight or finish targets"></textarea></label>
-    <label class="full">Files: CAD, drawing or photo<input name="files" type="file" multiple accept=".step,.stp,.iges,.igs,.stl,.obj,.3dm,.dxf,.dwg,.pdf,.sldprt,.sldasm,.x_t,.x_b,.f3d,.png,.jpg,.jpeg,.zip"><span class="hint">STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.</span><span class="err" id="ferr"></span></label>
+    <label id="needL">Need by (optional)<input name="need" type="date"></label>
+    <label class="full" id="notesL">Notes<textarea name="notes" rows="4" placeholder="What it's for, loads, weight or finish targets"></textarea></label>
+    <label class="full" id="filesL">Files: CAD, drawing or photo<input name="files" type="file" multiple accept=".step,.stp,.iges,.igs,.stl,.obj,.3dm,.dxf,.dwg,.pdf,.sldprt,.sldasm,.x_t,.x_b,.f3d,.png,.jpg,.jpeg,.zip"><span class="hint" id="fhint">STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.</span><span class="err" id="ferr"></span></label>
     <label class="trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
    </fieldset>
    <p class="note" id="paynote"></p>
@@ -265,6 +303,7 @@ html,body{margin:0;background:#eef2f3}
 </div></div>
 
 <div class="wb" style="padding-top:0"><div class="w" style="border-top:1px solid var(--rule);padding-top:16px;font-size:13px;color:var(--muted)">© 2026 Wyspa Technologies LLC · Prices are estimates until we confirm them.</div></div>
+<div class="wb pbar" id="bar" hidden aria-hidden="true"><div class="bt"><b id="barTot"></b><span id="barPer"></span></div><a href="#est" id="barGo">See details</a></div>
 
 <script>
 (function () {
@@ -499,13 +538,49 @@ html,body{margin:0;background:#eef2f3}
   el('nodxf').addEventListener('click', function () { geo = null; geoFile = null; E.dxf.value = ''; lockSizes(false); dxfMsg.textContent = DXF_HINT; update(); });
 
   var isPanel = function () { return E.kind.value === 'Flat panel'; };
+  var isCored = function () { return E.pCore.value !== 'solid'; };
+  var MAX_L = 2390, MAX_W = 1170, BIG = "Biggest part: 2390 x 1170 mm (94 x 46 in). Bigger? Press Send and we'll quote it.";
+  var EDGE_H = { trimmed: 'Cut square. We seal the core at the edge.', ramp30: 'The core tapers at 30° so the skins meet in a solid edge. Good for bolts near the edge.',
+    edge_band: 'A 25 mm strip of dense foam along the edge, full thickness. Good for bolts near the edge.' };
+  var userEdge = 'trimmed', optsAsked = false;
+  function coreOptions() {
+    if (optsAsked || !QUOTE_URL) return;
+    optsAsked = true;
+    fetch(QUOTE_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ site_key: SITE_KEY, origin: location.origin, cid: cid, action: 'options' }) })
+      .then(function (r) { return r.json(); })
+      .then(function (o) {
+        var t = o && o.core_thickness_mm, lb = (o && o.core_thickness_label) || [];
+        if (!Array.isArray(t) || !t.length) return;
+        var was = E.pCoreT.value;
+        E.pCoreT.innerHTML = t.map(function (v, i) { return '<option value="' + esc(+v) + '">' + esc(lb[i] || v + ' mm') + '</option>'; }).join('');
+        E.pCoreT.value = t.map(Number).indexOf(+was) >= 0 ? String(+was) : t.map(Number).indexOf(12.7) >= 0 ? '12.7' : String(+t[0]);
+        if (String(E.pCoreT.value) !== String(+was)) update(); else coreHints();
+      })
+      .catch(function () {});
+  }
+  function coreHints() {
+    var T = +(+E.pCoreT.value + 2 * +E.pSkin.value).toFixed(2);
+    el('totT').textContent = 'Total thickness ' + T + ' mm (' + (T / 25.4).toFixed(2) + ' in).';
+    el('edgeH').textContent = E.pCore.value === 'WB-HC48' ? 'Honeycomb always gets the 30° ramp edge.' : EDGE_H[E.pEdge.value] || '';
+  }
+  var ofs = el('of'), sfs = el('sf'), trap = sfs.querySelector('.trap');
+  function layout(panel) {
+    ['needL', 'notesL', 'filesL'].forEach(function (id) {
+      var n = el(id);
+      if (!panel && n.parentNode !== ofs) ofs.appendChild(n);
+      else if (panel && n.parentNode !== sfs) sfs.insertBefore(n, trap);
+    });
+    el('go').textContent = panel ? 'Send' : 'Send for a quote';
+    el('sendH').textContent = panel ? 'Send it' : 'Your details';
+    el('fhint').textContent = panel ? 'STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.' : 'STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all.';
+  }
   function specOf() {
     var q = qtyN();
     if (!(q >= 1)) return { ask: 'Enter a whole number, 1 or more, for the quantity.' };
     if (q > 10000) return { review: 'More than 10,000 parts' };
     if (geo && geo.parts > 1) return { review: 'Your file has ' + geo.parts + ' different parts. We price sets by hand.' };
-    var S = {}, ask = [], lbl = { pL: 'Length', pW: 'Width', pT: 'Thickness', pSkin: 'Outer layers' }, cored = E.pCore.value === 'core';
-    ['pL', 'pW', 'pT'].concat(cored ? ['pSkin'] : []).forEach(function (n) {
+    var S = {}, ask = [], lbl = { pL: 'Length', pW: 'Width', pT: 'Thickness' }, cored = isCored();
+    ['pL', 'pW'].concat(cored ? [] : ['pT']).forEach(function (n) {
       var r = size(E[n].value);
       S[n] = r;
       var h = document.querySelector('[data-for=' + n + ']');
@@ -513,8 +588,10 @@ html,body{margin:0;background:#eef2f3}
       if (!(r.v > 0)) ask.push(lbl[n] + ': type a size, like 600 mm or 24 in.');
     });
     if (ask.length) return { ask: ask.join(' ') };
+    var coreT = cored ? +E.pCoreT.value : 0, skin = cored ? +E.pSkin.value : 0;
+    if (cored) S.pT = { v: +(coreT + 2 * skin).toFixed(2) };
     if (!geo) {
-      var anyIn = ['pL', 'pW', 'pT', 'pSkin'].some(function (n) { return S[n] && S[n].imp; });
+      var anyIn = ['pL', 'pW', 'pT'].some(function (n) { return S[n] && S[n].imp; });
       var lim = Math.min(S.pL.v, S.pW.v) / 4 < S.pT.v ? 60 : 25;
       ['pL', 'pW'].forEach(function (n) {
         var r = S[n], v = E[n].value.trim();
@@ -523,8 +600,11 @@ html,body{margin:0;background:#eef2f3}
       if (ask.length) return { ask: ask.join(' ') };
     }
     var L = geo ? Math.round(geo.L) : S.pL.v, W = geo ? Math.round(geo.W) : S.pW.v, holes = Math.max(0, Math.round(+E.pHoles.value || 0));
+    if (W > L) { var sw = L; L = W; W = sw; }
+    if (L > MAX_L || W > MAX_W) return { review: BIG };
     var spec = { units: 'mm', outline: { bbox: [L, W] }, finish: E.pFin.value, qty: q,
-      laminate: cored ? { family: E.pMat.value, type: 'sandwich', thickness: S.pT.v, skin: S.pSkin.v } : { family: E.pMat.value, thickness: S.pT.v } };
+      laminate: cored ? { family: E.pMat.value, type: 'sandwich', thickness: S.pT.v, skin: skin, core: { material_id: E.pCore.value } } : { family: E.pMat.value, thickness: S.pT.v } };
+    if (cored) spec.edge = E.pEdge.value;
     if (geo) {
       var hp = geo.holeLen != null ? geo.holeLen : 0;
       spec.outline.perimeter = Math.max(0, geo.cut - hp);
@@ -533,20 +613,23 @@ html,body{margin:0;background:#eef2f3}
       if (geo.holes && geo.holeArea != null) spec.cutouts.total_area = geo.holeArea;
     } else if (holes) spec.cutouts = { count: holes };
     var mat = E.pMat.options[E.pMat.selectedIndex].text, fin = E.pFin.options[E.pFin.selectedIndex].text;
-    var desc = 'Flat panel ' + L + ' × ' + W + ' × ' + S.pT.v + ' mm, ' + mat + ', ' + (cored ? 'foam core with ' + S.pSkin.v + ' mm outer layers' : 'solid') + ', ' + fin + ', ' +
+    var desc = 'Flat panel ' + L + ' × ' + W + ' × ' + S.pT.v + ' mm, ' + mat + ', ' + (cored ? 'core ' + E.pCore.options[E.pCore.selectedIndex].text + ', ' + coreT + ' mm thick, with ' + skin + ' mm skins each side, edges: ' + E.pEdge.options[E.pEdge.selectedIndex].text.toLowerCase() : 'solid') + ', ' + fin + ', ' +
       holeTxt(geo ? geo.holes : holes, geo ? geo.round : 0) + (geo ? ', outline from ' + geoFile.name + ' (' + (geo.cut / 1000).toFixed(2) + ' m of cutting)' : '') + '. Quantity ' + q + '.';
     return { spec: spec, desc: desc, q: q };
   }
 
   var est = el('est'), cur = null, seq = 0, timer = 0;
+  var plain = function (s) { return /gross blank|4 x 8 ft/i.test(s) ? BIG : s; };
+  var lines = function (a) { return a.filter(function (s, i) { return a.indexOf(s) === i; }).map(function (s) { return '<div>' + esc(s) + '</div>'; }).join(''); };
   function show(state) {
     var tot = el('tot'), warn = el('warn'), per = el('per'), props = el('props'), more = el('more');
-    tot.className = 'tot'; warn.innerHTML = ''; per.textContent = ''; props.textContent = ''; more.hidden = true;
+    tot.className = 'tot'; warn.innerHTML = ''; per.textContent = ''; props.textContent = ''; more.hidden = true; el('fnotes').textContent = '';
     el('ref').textContent = ref;
     el('estnote').hidden = !(state.res && state.res.status !== 'review');
     if (state.kind === 'other') {
-      el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Priced by review';
-      per.textContent = "Send the details below and we'll email your price within 1 working day.";
+      el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Request a quote';
+      per.innerHTML = '<span class="rq">We email your price within 1 working day.</span>';
+      props.textContent = 'Give us the overall size, quantity and material, and add your file if you have one. Then press Send for a quote.';
       return payState();
     }
     if (state.ask) { el('estlb').textContent = 'Check your sizes'; tot.className = 'tot rv'; tot.textContent = 'Check your sizes'; warn.innerHTML = '<div>' + esc(state.ask) + '</div>'; return payState(); }
@@ -561,7 +644,7 @@ html,body{margin:0;background:#eef2f3}
     if (r.status === 'review' || x.list_price == null) {
       el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Priced by review';
       per.textContent = "Press Send and we'll email your price within 1 working day.";
-      warn.innerHTML = (fl.reasons || []).map(function (s) { return '<div>' + esc(s) + '</div>'; }).join('');
+      warn.innerHTML = lines((fl.reasons || []).map(plain));
       return payState();
     }
     el('estlb').textContent = 'Budget estimate';
@@ -579,15 +662,25 @@ html,body{margin:0;background:#eef2f3}
         '<dt style="grid-column:1/-1">' + esc(p.label) + '</dt>';
       more.hidden = false;
     }
-    warn.innerHTML = (fl.reasons || []).concat(fl.notes || []).map(function (s) { return '<div>' + esc(s) + '</div>'; }).join('');
+    warn.innerHTML = lines((fl.reasons || []).map(plain));
+    el('fnotes').textContent = (fl.notes || []).filter(function (s) { return !/edges/i.test(s); }).join(' ');
     payState();
   }
 
   var cancel = function () { clearTimeout(timer); seq++; est.classList.remove('busy'); };
   function update() {
-    var panel = isPanel();
-    el('pf').hidden = !panel; el('of').hidden = panel;
-    el('skinL').hidden = E.pCore.value !== 'core';
+    var panel = isPanel(), cored = isCored();
+    el('pf').hidden = !panel; el('of').hidden = panel; layout(panel);
+    el('skinL').hidden = el('coreTL').hidden = el('edgeL').hidden = !cored; el('tL').hidden = cored;
+    if (cored) {
+      coreOptions();
+      if (!E.pCoreT.value) E.pCoreT.value = '12.7';
+      if (!E.pSkin.value) E.pSkin.value = '1';
+      var hc = E.pCore.value === 'WB-HC48';
+      if (hc) E.pEdge.value = 'ramp30'; else if (E.pEdge.disabled) E.pEdge.value = userEdge;
+      E.pEdge.disabled = hc;
+      coreHints();
+    } else E.pEdge.disabled = false;
     if (!panel) { cancel(); cur = { kind: 'other' }; return show(cur); }
     var s = specOf();
     if (s.ask || s.review) { cancel(); cur = s; return show(s); }
@@ -628,18 +721,45 @@ html,body{margin:0;background:#eef2f3}
     if (!PAY_ON || PAID || !QUOTE_URL || !x || x.list_price == null || !isPanel() || cur.pending) return { ok: false, why: '' };
     if (geoFile && !geo) why = "We couldn't read your DXF, so this price is from the sizes you typed. Press Send and we'll check your file and reply with a price.";
     else if (extraFiles().length) why = "You added files, so we'll check them first. Press Send and we'll reply with a firm price.";
-    else if (E.need.value) {
-      var ship = readyBy(x); ship.setDate(ship.getDate() + 7);
-      var nd = E.need.value.split('-').map(Number), need = new Date(nd[0], nd[1] - 1, nd[2]);
-      if (need < ship) why = 'To pay by card now, pick ' + shortDate(ship) + ' or later. That leaves a week for shipping. Or press Send and we will see what we can do.';
-    }
+    else if (tooSoon(x)) why = 'To pay by card now, pick ' + shortDate(shipBy(x)) + ' or later. That leaves a week for shipping. Or press Send and we will see what we can do.';
     return { ok: !why, why: why, x: x };
+  }
+  var shipBy = function (x) { var d = readyBy(x); d.setDate(d.getDate() + 7); return d; };
+  function tooSoon(x) {
+    if (!E.need.value || !x || !x.ready_by) return false;
+    var nd = E.need.value.split('-').map(Number);
+    return new Date(nd[0], nd[1] - 1, nd[2]) < shipBy(x);
   }
   function payState() {
     var p = payOK();
     el('pay').hidden = !p.ok; el('payterms').hidden = !p.ok;
     el('paynote').textContent = p.why;
+    var x = isPanel() && cur && !cur.pending && cur.res && cur.res.quantities[0];
+    el('needw').textContent = x && x.list_price != null && tooSoon(x) ? 'Our earliest ship date is ' + longDate(readyBy(x)) + ". Press Send and we'll see what we can do." : '';
+    barText();
   }
+
+  var bar = el('bar'), seen = { pf: false, est: false }, narrow = window.matchMedia ? window.matchMedia('(max-width:820px)') : { matches: false };
+  function barText() {
+    var x = cur && cur.res && !cur.pending && cur.res.quantities[0], t = el('tot').textContent;
+    if (x && x.list_price != null && cur.res.status !== 'review') {
+      el('barTot').textContent = usd(x.list_price);
+      el('barPer').textContent = usd(x.list_price_per_part) + ' per panel × ' + x.qty + ' · ready ' + shortDate(readyBy(x));
+    } else { el('barTot').textContent = t || 'Pricing…'; el('barPer').textContent = cur && cur.pending ? '' : 'See the price box for why.'; }
+    barShow();
+  }
+  function barShow() {
+    var on = narrow.matches && isPanel() && !f.hidden && seen.pf && !seen.est;
+    if (bar.hidden === !on) return;
+    bar.hidden = !on; bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+    document.body.style.paddingBottom = on ? bar.offsetHeight + 'px' : '';
+  }
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { seen[e.target.id] = e.isIntersecting; }); barShow(); }, { threshold: 0 });
+    io.observe(el('pf')); io.observe(el('est'));
+  }
+  if (narrow.addEventListener) narrow.addEventListener('change', barShow);
+  el('barGo').addEventListener('click', function (ev) { ev.preventDefault(); est.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
   var text = function (pay) {
     var lines = ['Quote request ' + ref, ''];
@@ -654,7 +774,8 @@ html,body{margin:0;background:#eef2f3}
       } else lines.push('Priced by review' + (r && r.flags ? ': ' + r.flags.reasons.join('; ') : cur.review ? ': ' + cur.review : cur.fail ? ' (no instant price: ' + cur.fail + ')' : '') + '.');
       if (pay) lines.push('Card checkout: the buyer pressed Order and pay by card. The pay link is made from server quote ' + r.quote_id + '.');
     } else {
-      lines.push('Part type: ' + E.kind.value, 'Quantity: ' + E.qty.value, 'Material: ' + E.mat.value, 'Priced by review.');
+      var dims = ['oL', 'oW', 'oH'].map(function (n) { var v = E[n].value.trim(), r = size(v); return v ? v + (r.v > 0 && !r.bare ? ' (' + Math.round(r.v) + ' mm)' : '') : '?'; });
+      lines.push('Part type: ' + E.kind.value, 'Quantity: ' + E.qty.value, 'Overall size L x W x H: ' + (dims.join(' x ') === '? x ? x ?' ? 'not given' : dims.join(' x ')), 'Material: ' + E.mat.value, 'Request for a quote (priced by review).');
     }
     lines.push('', 'Need by: ' + (E.need.value || 'flexible'), 'Name: ' + E.name.value.trim(), 'Company: ' + E.org.value.trim(), 'Email: ' + E.email.value.trim(), '', 'Notes: ' + E.notes.value.trim());
     return lines.join('\n');
@@ -719,7 +840,7 @@ html,body{margin:0;background:#eef2f3}
   f.addEventListener('submit', function (ev) { ev.preventDefault(); send(false); });
   el('pay').addEventListener('click', function () { if (payOK().ok) send(true); });
   f.addEventListener('input', function (ev) { if (ev.target.name === 'files') checkFiles(); if (['name', 'email', 'org', 'notes', 'files', 'website'].indexOf(ev.target.name) < 0) update(); else payState(); });
-  f.addEventListener('change', function (ev) { if (ev.target.name === 'dxf') return; if (ev.target.name === 'files') { checkFiles(); payState(); } else update(); });
+  f.addEventListener('change', function (ev) { if (ev.target.name === 'dxf') return; if (ev.target.name === 'pEdge' && !E.pEdge.disabled) userEdge = E.pEdge.value; if (ev.target.name === 'files') { checkFiles(); payState(); } else update(); });
   el('again').addEventListener('click', function () {
     f.reset(); geo = null; geoFile = null; lockSizes(false); dxfMsg.textContent = DXF_HINT; ref = newRef(); cur = null;
     msg.textContent = ''; el('ferr').textContent = ''; el('done').hidden = true; f.hidden = false; update(); E.name.focus();
