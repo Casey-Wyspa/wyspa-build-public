@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carbon Fiber Parts, Quoted in a Day | Wyspa Build</title>
-<meta name="description" content="Carbon fiber and fiberglass panels, drone rotors and molded parts. Send a file and we email your quote within 1 working day. No account needed.">
+<title>Carbon Fiber Panels, Priced in Seconds | Wyspa Build</title>
+<meta name="description" content="Instant prices for carbon fiber and fiberglass flat panels. Type the size or add a DXF. Molded parts and drone rotors quoted within 1 working day. No account needed.">
 <link rel="canonical" href="https://build.wyspa.tech/">
 <meta name="theme-color" content="#0d2430">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Wyspa Build">
-<meta property="og:title" content="Composite parts, quoted in a day">
-<meta property="og:description" content="Panels, drone rotors and molded parts. Send a file and we email your quote within 1 working day. No account needed.">
+<meta property="og:title" content="Composite parts, priced in seconds">
+<meta property="og:description" content="Flat panels priced in seconds. Molded parts and drone rotors quoted within 1 working day. No account needed.">
 <meta property="og:url" content="https://build.wyspa.tech/">
 <meta property="og:image" content="https://build.wyspa.tech/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Wyspa Build: composite parts, quoted in a day. build.wyspa.tech">
+<meta property="og:image:alt" content="Wyspa Build: composite parts, priced in seconds. build.wyspa.tech">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;125,800&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
@@ -41,6 +41,7 @@ html,body{margin:0;background:#eef2f3}
 .wb .btn.pr{background:var(--ink);color:var(--paper)}
 .wb .btn:hover{border-color:var(--signal)}
 .wb .btn:disabled{opacity:.6;cursor:wait}
+.wb .link{justify-self:start;padding:0;border:0;background:none;font:600 13px var(--b);color:var(--sea);text-decoration:underline;cursor:pointer;text-transform:none;letter-spacing:0}
 .wb .fig{background:var(--sheet);border:1px solid var(--rule);padding:16px;margin:0}
 .wb .fig svg{width:100%;height:auto;display:block}
 .wb .cap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px}
@@ -64,23 +65,44 @@ html,body{margin:0;background:#eef2f3}
 .wb .steps li::before{content:"0" counter(s);display:block;font:500 13px var(--m);color:var(--signal-ink);margin-bottom:6px}
 .wb .steps h3{font-size:17px;margin-bottom:6px}
 .wb .steps p{color:var(--muted);font-size:15px}
+.wb .qt{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:start}
 .wb form fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px;align-items:start}
+.wb form fieldset+fieldset{margin-top:16px}
 .wb label{display:grid;gap:6px;font:500 12px/1.3 var(--m);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .wb label.full{grid-column:1/-1}
 .wb input,.wb select,.wb textarea{font:400 16px/1.4 var(--b);color:var(--ink);background:var(--sheet);border:1px solid var(--rule);padding:10px 12px;width:100%;border-radius:0;text-transform:none;letter-spacing:0}
+.wb input[readonly]{background:#e6eef0;color:var(--muted)}
 .wb input:focus,.wb select:focus,.wb textarea:focus{outline:2px solid var(--sea);outline-offset:-1px}
-.wb .hint{font:400 13px var(--b);color:var(--muted);text-transform:none;letter-spacing:0}
+.wb .hint{font:400 13px var(--b);color:var(--muted);text-transform:none;letter-spacing:0;overflow-wrap:anywhere}
+.wb .hint:empty,.wb .err:empty,.wb .note:empty,.wb .warn:empty{display:none}
 .wb .err{font:400 13px var(--b);color:#a3361f;text-transform:none;letter-spacing:0}
-.wb .err:empty,.wb .note:empty{display:none}
 .wb .note{font-size:14px;color:var(--muted);margin-top:12px}
+.wb .est{background:var(--sheet);border:1.5px solid var(--ink);padding:24px;position:sticky;top:16px}
+.wb .est .tot{font:800 clamp(36px,5vw,52px)/1 var(--d);font-stretch:125%;margin:10px 0 4px;transition:opacity .2s}
+.wb .est.busy .tot,.wb .est.busy table{opacity:.35}
+.wb .est .tot.rv{font-size:clamp(26px,3vw,34px)}
+.wb .est table{width:100%;border-collapse:collapse;font-size:15px;margin-top:16px}
+.wb .est td{padding:8px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.wb .est td.n{text-align:right;font-family:var(--m);font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:12px}
+.wb .est tr.t td{font-weight:600;border-bottom:0;border-top:1.5px solid var(--ink)}
+.wb .est details{margin-top:12px;font-size:14px;color:var(--muted)}
+.wb .est summary{cursor:pointer;color:var(--sea);font-weight:600}
+.wb .est dl{display:grid;grid-template-columns:auto auto;gap:4px 12px;margin:8px 0 0}
+.wb .est dd{margin:0;text-align:right;font-family:var(--m);color:var(--ink)}
+.wb .warn{margin-top:12px;padding:10px 12px;border-left:3px solid var(--signal);font-size:14px;color:var(--ink);background:#fff}
+.wb .warn div+div{margin-top:8px}
+.wb .send{margin-top:32px;padding-top:24px;border-top:1px solid var(--rule)}
+.wb .send fieldset{margin-top:16px}
 .wb .box{background:var(--sheet);border:1.5px solid var(--ink);padding:24px}
 .wb .box h3{margin-bottom:10px}
 .wb .box p+p{margin-top:10px}
 .wb .ct{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 .wb .ct .v{font:500 18px var(--m);color:var(--ink)}
 .wb .trap{position:absolute;left:-9999px}
+.wb .paid{margin:0 0 24px;padding:10px 12px;border-left:3px solid var(--signal);background:#fff}
 @media (max-width:820px){
- .wb .hero,.wb .sh,.wb .caps{grid-template-columns:minmax(0,1fr)}
+ .wb .hero,.wb .sh,.wb .caps,.wb .qt{grid-template-columns:minmax(0,1fr)}
+ .wb .est{position:static}
  .wb .ci{border-right:0!important;border-bottom:1px solid var(--rule)!important}
  .wb .ci:last-child{border-bottom:0!important}
 }
@@ -93,11 +115,12 @@ html,body{margin:0;background:#eef2f3}
 <div class="wb" style="padding-bottom:0"><div class="w" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--rule);padding-bottom:16px"><a href="https://www.wyspa.tech" style="display:flex;align-items:center;gap:10px;font:800 18px/1 var(--d);font-stretch:125%;letter-spacing:.04em;color:var(--ink);text-decoration:none"><img src="wyspa-mark.png" alt="Wyspa Tech logo" width="38" height="28" style="height:28px;width:auto;display:block"><span>WYSPA<span style="color:var(--signal)">/</span>BUILD</span></a><a href="https://www.wyspa.tech" style="font:500 13px var(--m);color:var(--muted);text-decoration:none">← wyspa.tech</a></div></div>
 
 <div class="wb"><div class="w">
+<p class="paid" id="paid" hidden></p>
 <header class="hero">
  <div>
-  <h1>Composite parts, <em>quoted</em> in a day.</h1>
-  <p class="lead">Panels, drone rotors and molded parts. Send us your file and we email your price within 1 working day. No account needed.</p>
-  <div class="cta"><a class="btn pr" href="#quote">Request a quote</a><a class="btn" href="#how">How it works</a></div>
+  <h1>Composite parts, <em>priced</em> in seconds.</h1>
+  <p class="lead">Flat panels get a price right here. Molded parts and drone rotors: send your file and we email your price within 1 working day. No account needed.</p>
+  <div class="cta"><a class="btn pr" href="#quote">Get a price</a><a class="btn" href="#how">How it works</a></div>
  </div>
  <figure class="fig">
   <svg viewBox="0 0 800 400" role="img" aria-label="Exploded laminate stack with plies at 0, +45, -45 and 90 degrees over a foam core">
@@ -126,7 +149,7 @@ html,body{margin:0;background:#eef2f3}
 <section id="make">
  <div class="sh"><div class="lb">What we make</div><div><h2>Parts we make</h2></div></div>
  <div class="caps">
-  <div class="ci"><div class="lb">Flat panel</div><h3>Cut plate and sandwich panels</h3><p>Solid carbon or fiberglass plate, or skins over a foam core. Cut to your outline, with holes and cutouts.</p><p class="spec">Up to 2400 × 1200 mm (94 × 47 in)</p></div>
+  <div class="ci"><div class="lb">Flat panel</div><h3>Cut plate and sandwich panels</h3><p>Solid carbon or fiberglass plate, or skins over a foam core. Cut to your outline, with holes and cutouts. Priced in seconds.</p><p class="spec">Up to 2390 × 1170 mm (94 × 46 in)</p></div>
   <div class="ci"><div class="lb">Molded part</div><h3>Shells, covers, fairings, fins</h3><p>We make the mold for your part. On a repeat order we reuse it.</p></div>
   <div class="ci"><div class="lb">Drone rotor</div><h3>Rotors and propellers</h3><p>Made from your rotor file, or we design the rotor for you.</p></div>
   <div class="ci"><div class="lb">Other</div><h3>Assemblies and odd shapes</h3><p>Tell us what it has to do. We work out how to make it.</p></div>
@@ -134,7 +157,7 @@ html,body{margin:0;background:#eef2f3}
 </section>
 
 <section id="materials">
- <div class="sh"><div class="lb">Materials</div><div><h2>What it's made of</h2><p>Not sure what to pick? Tell us what the part has to carry and we choose the layup. Your quote includes calculated weight and stiffness.</p></div></div>
+ <div class="sh"><div class="lb">Materials</div><div><h2>What it's made of</h2><p>Not sure what to pick? Tell us what the part has to carry and we choose the layup. Panel prices come with calculated weight and stiffness.</p></div></div>
  <ul class="pp">
   <li><b>Carbon fiber.</b> Twill weave. Stiff and light.</li>
   <li><b>Carbon prepreg.</b> Lighter and stronger, with a cleaner finish.</li>
@@ -148,46 +171,88 @@ html,body{margin:0;background:#eef2f3}
 <section id="how">
  <div class="sh"><div class="lb">How it works</div><div><h2>Three steps</h2></div></div>
  <ol class="steps">
-  <li><h3>Send your part</h3><p>Fill in the form below and add a file or sketch.</p></li>
-  <li><h3>Get your quote</h3><p>We email your price within 1 working day, with a ship date.</p></li>
-  <li><h3>Approve and we make it</h3><p>Once you approve the quote, pay by card or bank transfer. We check every part before we start, then make and ship it.</p></li>
+  <li><h3>Get a price</h3><p>Flat panels: type the size or add a DXF and see the price. Other parts: send the details and we email a price within 1 working day. Every order is at least $1,500.</p></li>
+  <li><h3>Order it</h3><p>Pay by card, or press Send for a firm quote. Bank transfer and PO go through Send.</p></li>
+  <li><h3>We make it</h3><p>We check every order before we start. Then we make and ship your parts.</p></li>
  </ol>
 </section>
 
 <section id="quote">
- <div class="sh"><div class="lb">Quote</div><div><h2>Request a quote</h2><p>We email your price within 1 working day. Nothing is charged until you approve it.</p></div></div>
+ <div class="sh"><div class="lb">Price</div><div><h2>Get a price</h2><p>Flat panels are priced as you type. For other parts, send the details and we email your price within 1 working day.</p></div></div>
  <form id="rf" novalidate>
-  <fieldset>
-   <label>Name<input name="name" autocomplete="name" required></label>
-   <label>Email<input name="email" type="email" autocomplete="email" required></label>
-   <label>Company (optional)<input name="org" autocomplete="organization"></label>
-   <label>Part type<select name="kind" required>
-    <option value="">Choose one</option>
-    <option>Flat panel</option>
-    <option>Molded part</option>
-    <option>Drone rotor</option>
-    <option>Other</option>
-   </select></label>
-   <label>Quantity<input name="qty" type="number" inputmode="numeric" min="1" step="1" required></label>
-   <label>Material<select name="mat">
-    <option>Not sure, you choose</option>
-    <option>Carbon fiber</option>
-    <option>Carbon prepreg</option>
-    <option>Fiberglass</option>
-    <option>Carbon and glass</option>
-    <option>Other (say in notes)</option>
-   </select></label>
-   <label>Need by (optional)<input name="need" type="date"></label>
-   <label class="full">Notes<textarea name="notes" rows="4" placeholder="What it's for, sizes, loads, weight or finish targets"></textarea></label>
-   <label class="full">Files: CAD, drawing or photo<input name="files" type="file" multiple accept=".step,.stp,.iges,.igs,.stl,.obj,.3dm,.dxf,.dwg,.pdf,.sldprt,.sldasm,.x_t,.x_b,.f3d,.png,.jpg,.jpeg,.zip"><span class="hint">STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all.</span><span class="err" id="ferr"></span></label>
-   <label class="trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-  </fieldset>
-  <div class="cta"><button class="btn pr" type="submit" id="go">Send request</button></div>
-  <p class="note" id="msg" aria-live="polite"></p>
+  <div class="qt">
+   <div>
+    <fieldset>
+     <label>Part type<select name="kind">
+      <option>Flat panel</option>
+      <option>Molded part</option>
+      <option>Drone rotor</option>
+      <option>Other</option>
+     </select></label>
+     <label>Quantity<input name="qty" inputmode="numeric" autocomplete="off" value="10"></label>
+    </fieldset>
+    <fieldset id="pf">
+     <label class="full">Outline file (optional)<input name="dxf" type="file" accept=".dxf"><span class="hint" id="dxfmsg">Add a DXF and we read the outline and holes. Or type the sizes below.</span><button type="button" class="link" id="nodxf" hidden>Type the sizes instead</button></label>
+     <label>Length<input name="pL" value="600"><span class="hint" data-for="pL">mm or in. Up to 2390 mm.</span></label>
+     <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm.</span></label>
+     <label>Thickness<input name="pT" value="2"><span class="hint" data-for="pT">mm or in, total.</span></label>
+     <label>Material<select name="pMat">
+      <option value="carbon">Carbon fiber</option>
+      <option value="prepreg">Carbon prepreg</option>
+      <option value="glass">Fiberglass</option>
+      <option value="hybrid">Carbon and glass</option>
+     </select></label>
+     <label>Foam core<select name="pCore"><option value="solid">No, solid</option><option value="core">Yes, foam in the middle</option></select></label>
+     <label id="skinL" hidden>Outer layers, each side<input name="pSkin" value="1 mm"><span class="hint" data-for="pSkin">Thickness of each skin on the foam.</span></label>
+     <label>Finish<select name="pFin">
+      <option value="matte">Matte</option>
+      <option value="gloss">Gloss one side</option>
+      <option value="clear">Clear coat</option>
+     </select></label>
+     <label>Holes and cutouts per panel<input name="pHoles" type="number" min="0" step="1" value="0"></label>
+    </fieldset>
+    <fieldset id="of" hidden>
+     <label>Material<select name="mat">
+      <option>Not sure, you choose</option>
+      <option>Carbon fiber</option>
+      <option>Carbon prepreg</option>
+      <option>Fiberglass</option>
+      <option>Carbon and glass</option>
+      <option>Other (say in notes)</option>
+     </select></label>
+    </fieldset>
+   </div>
+   <aside class="est" id="est" aria-live="polite">
+    <div class="lb"><span id="estlb">Budget estimate</span> · <span id="ref"></span></div>
+    <div class="tot" id="tot"></div>
+    <div class="note" style="margin-top:0" id="per"></div>
+    <div class="note" id="props"></div>
+    <details id="more" hidden><summary>More calculated properties</summary><dl id="dl"></dl></details>
+    <div class="warn" id="warn"></div>
+    <p class="note" id="estnote">Shipping not included. This is a budget estimate. We check every part before we start, and the price may change after that check.</p>
+   </aside>
+  </div>
+
+  <div class="send" id="send">
+   <h3>Send it</h3>
+   <fieldset>
+    <label>Name<input name="name" autocomplete="name" required></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required></label>
+    <label>Company (optional)<input name="org" autocomplete="organization"></label>
+    <label>Need by (optional)<input name="need" type="date"></label>
+    <label class="full">Notes<textarea name="notes" rows="4" placeholder="What it's for, loads, weight or finish targets"></textarea></label>
+    <label class="full">Files: CAD, drawing or photo<input name="files" type="file" multiple accept=".step,.stp,.iges,.igs,.stl,.obj,.3dm,.dxf,.dwg,.pdf,.sldprt,.sldasm,.x_t,.x_b,.f3d,.png,.jpg,.jpeg,.zip"><span class="hint">STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.</span><span class="err" id="ferr"></span></label>
+    <label class="trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+   </fieldset>
+   <p class="note" id="paynote"></p>
+   <div class="cta"><button class="btn pr" type="submit" id="go">Send</button><button class="btn" type="button" id="pay" hidden>Order and pay by card</button></div>
+   <p class="note" id="payterms" hidden>You pay the price shown, in full, by card. Shipping is extra. We email the shipping price before we ship.<br>We check every order before we start. If the price changes, you choose: pay the difference or get a full refund. You can cancel for a full refund any time before we start. Paying by bank transfer or PO? Use Send.</p>
+   <p class="note" id="msg" aria-live="polite"></p>
+  </div>
  </form>
  <div class="box" id="done" hidden tabindex="-1">
   <h3>Thanks, we have it.</h3>
-  <p>Your reference is <b id="ref"></b>. We'll email your price to <b id="to"></b> within 1 working day.</p>
+  <p>Your reference is <b id="dref"></b>. We'll email <b id="to"></b> within 1 working day.</p>
   <p>Nothing is charged until you approve the quote. Then you can pay by card or bank transfer.</p>
   <div class="cta"><button class="btn" type="button" id="again">Send another request</button></div>
  </div>
@@ -199,94 +264,467 @@ html,body{margin:0;background:#eef2f3}
 </section>
 </div></div>
 
-<div class="wb" style="padding-top:0"><div class="w" style="border-top:1px solid var(--rule);padding-top:16px;font-size:13px;color:var(--muted)">© 2026 Wyspa Technologies LLC · build.wyspa.tech</div></div>
+<div class="wb" style="padding-top:0"><div class="w" style="border-top:1px solid var(--rule);padding-top:16px;font-size:13px;color:var(--muted)">© 2026 Wyspa Technologies LLC · Prices are estimates until we confirm them.</div></div>
 
 <script>
 (function () {
+  var QUOTE_URL = 'https://script.google.com/macros/s/AKfycbytV04dfLSnVW3e5K9HsNitCLkhOVqISiRBQHvwGaJ5QJRgo6L-NqhzgBoJZS0vBMal/exec';
+  var SITE_KEY = 'wb-site-2026-10';
   var URL_IN = 'https://script.google.com/macros/s/AKfycbxhM3gdUmvr6sD52QXUTkzJY2zbjkdK3MWFhvEw-DMHVpwpJ4J8L_DJ-WB7ErAXgsmRHg/exec';
+  var PAY_ON = true;
   var OK = /\.(step|stp|iges|igs|stl|obj|3dm|dxf|dwg|pdf|sldprt|sldasm|x_t|x_b|f3d|png|jpe?g|zip)$/i;
+
   var el = function (id) { return document.getElementById(id); };
-  var f = el('rf'), msg = el('msg'), ferr = el('ferr'), go = el('go');
+  var f = el('rf'), E = f.elements, msg = el('msg');
   var pad = function (n) { return String(n).padStart(2, '0'); };
-  var now = new Date();
-  f.elements.need.min = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+  var usd = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  E.need.min = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate());
   var newRef = function () {
     var d = new Date();
     return 'WB-' + pad(d.getFullYear() % 100) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
   };
-  var text = function (ref) {
-    var e = f.elements;
-    return [
-      'Quote request ' + ref,
-      'From the request form (no instant estimate shown).',
-      '',
-      'Part type: ' + e.kind.value,
-      'Quantity: ' + e.qty.value,
-      'Material: ' + e.mat.value,
-      'Need by: ' + (e.need.value || 'flexible'),
-      '',
-      'Name: ' + e.name.value.trim(),
-      'Company: ' + e.org.value.trim(),
-      'Email: ' + e.email.value.trim(),
-      '',
-      'Notes: ' + e.notes.value.trim()
-    ].join('\n');
+  var ref = newRef();
+  var cid = '';
+  try { cid = localStorage.getItem('wb-cid') || ''; if (!cid) { cid = Math.random().toString(36).slice(2, 12); localStorage.setItem('wb-cid', cid); } } catch (e) { cid = 'x' + Math.random().toString(36).slice(2, 10); }
+
+  var Q = new URLSearchParams(location.search), PAID = /^WB-[A-Z0-9-]{4,20}$/i.test(Q.get('paid') || '') ? Q.get('paid') : '';
+  if (PAID) { el('paid').textContent = 'Payment received for ' + PAID + ". We'll check your order and email you within 1 working day."; el('paid').hidden = false; }
+
+  var NUM = /^(?:(\d+(?:\.\d*)?|\.\d+)|(?:(\d+)(?:\s+|\s*-\s*))?(\d+)\s*\/\s*(\d+))\s*(mm|cm|in|inch|inches|")?$/;
+  function size(txt) {
+    var s = String(txt).trim().toLowerCase().replace(/[”″]|''/g, '"').replace(/⁄/g, '/')
+      .replace(/\s*([½¼¾⅛⅜⅝⅞])/g, function (_, c) { return ' ' + { '½': '1/2', '¼': '1/4', '¾': '3/4', '⅛': '1/8', '⅜': '3/8', '⅝': '5/8', '⅞': '7/8' }[c]; }).trim();
+    var m = s.match(NUM);
+    if (!m) return { v: NaN };
+    var num = m[1] != null ? +m[1] : +(m[2] || 0) + m[3] / m[4];
+    var u = m[5] ? (m[5] === 'mm' || m[5] === 'cm' ? m[5] : 'in') : m[1] != null ? 'mm' : 'in';
+    if (!isFinite(num)) return { v: NaN };
+    if (u === 'mm') return { v: num, bare: !m[5] };
+    var x = num * { cm: 10, in: 25.4 }[u];
+    return { v: +(x + 1e-9).toFixed(x < 1 || u === 'in' ? 2 : 1), imp: u === 'in', note: '= ' + +(x + 1e-9).toFixed(x < 1 || u === 'in' ? 2 : 1) + ' mm' };
+  }
+  var qtyN = function () { var t = E.qty.value.trim().replace(/\s*(pcs?|pieces?)\.?$/i, ''); return /^\d+$|^\d{1,3}(,\d{3})+$/.test(t) ? +t.replace(/,/g, '') : NaN; };
+
+  function fromDxf(text) {
+    var ln = text.split(/\r?\n/), pairs = [], i, k;
+    for (i = 0; i + 1 < ln.length; i += 2) pairs.push([parseInt(ln[i], 10), ln[i + 1].trim()]);
+    var scale = 1, ui = pairs.findIndex(function (p) { return p[0] === 9 && p[1] === '$INSUNITS'; });
+    var uc = ui >= 0 ? parseInt(pairs[ui + 1][1], 10) : 0;
+    if (uc) scale = { 1: 25.4, 2: 304.8, 4: 1, 5: 10, 6: 1000 }[uc] || 1;
+    i = 0;
+    while (i < pairs.length && !(pairs[i][0] === 2 && pairs[i][1] === 'ENTITIES')) i++;
+    var ents = [], cur = null;
+    for (; i < pairs.length; i++) {
+      var c = pairs[i][0], v = pairs[i][1];
+      if (c === 0) { if (v === 'ENDSEC') break; cur = { type: v, x: [], y: [], b: [] }; ents.push(cur); continue; }
+      if (!cur) continue;
+      var n = parseFloat(v);
+      if (c === 10) { cur.x.push(n); cur.b.push(0); } else if (c === 20) cur.y.push(n);
+      else if (c === 11) cur.ex = n; else if (c === 21) cur.ey = n;
+      else if (c === 40) cur.r = n; else if (c === 50) cur.a0 = n; else if (c === 51) cur.a1 = n;
+      else if (c === 41 && cur.type === 'ELLIPSE') cur.p0 = n;
+      else if (c === 42 && cur.b.length) cur.b[cur.b.length - 1] = n;
+      else if (c === 70) cur.flags = parseInt(v, 10);
+      else if (c === 8) cur.layer = v;
+    }
+    var flat = [];
+    for (k = 0; k < ents.length; k++) {
+      var e0 = ents[k];
+      if (e0.type === 'POLYLINE') {
+        var p0 = { type: 'LWPOLYLINE', x: [], y: [], b: [], flags: e0.flags, layer: e0.layer };
+        while (ents[k + 1] && ents[k + 1].type === 'VERTEX') { var vt = ents[++k]; p0.x.push(vt.x[0]); p0.y.push(vt.y[0]); p0.b.push(vt.b[0] || 0); }
+        flat.push(p0);
+      } else if (e0.type !== 'VERTEX' && e0.type !== 'SEQEND') flat.push(e0);
+    }
+    var drawn = function (e) { return /^(LINE|ARC|CIRCLE|LWPOLYLINE|SPLINE|ELLIPSE)$/.test(e.type); };
+    var skip = /border|title|frame|sheet(?![\s_-]*metal)|format|tblock|notes?\b|(^|[^a-z])dim/i;
+    var list = flat.filter(function (e) { return drawn(e) && !skip.test(e.layer || ''); });
+    if (!list.length) list = flat.filter(drawn);
+    var box = function () { return [Infinity, Infinity, -Infinity, -Infinity]; };
+    var grow = function (b, q) { b[0] = Math.min(b[0], q[0]); b[1] = Math.min(b[1], q[1]); b[2] = Math.max(b[2], q[2]); b[3] = Math.max(b[3], q[3]); };
+    var all = [], shapes = [], segs = [], cb, cp;
+    var pt = function (x, y) { grow(cb, [x, y, x, y]); cp.push([x, y]); };
+    var shoe = function (p) { var s = 0; for (var j = 0; j + 1 < p.length; j++) s += p[j][0] * p[j + 1][1] - p[j + 1][0] * p[j][1]; return s; };
+    var arcPts = function (cx, cy, r, a0, a1) { var s = a1 - a0; if (s <= 0) s += 360; for (var t = 0; t <= 16; t++) { var a = (a0 + s * t / 16) * Math.PI / 180; pt(cx + r * Math.cos(a), cy + r * Math.sin(a)); } return r * s * Math.PI / 180; };
+    list.forEach(function (e) {
+      cb = box(); cp = [];
+      var len = 0, closed = false, chain = null, nn, j;
+      if (e.type === 'LINE' && e.x.length) { pt(e.x[0], e.y[0]); pt(e.ex, e.ey); len = Math.hypot(e.ex - e.x[0], e.ey - e.y[0]); chain = [e.x[0], e.y[0], e.ex, e.ey]; }
+      else if (e.type === 'CIRCLE') { closed = true; len = arcPts(e.x[0], e.y[0], e.r, 0, 360); }
+      else if (e.type === 'ARC') {
+        len = arcPts(e.x[0], e.y[0], e.r, e.a0 || 0, e.a1 || 0);
+        var r0 = e.r, b0 = (e.a0 || 0) * Math.PI / 180, b1 = (e.a1 || 0) * Math.PI / 180;
+        chain = [e.x[0] + r0 * Math.cos(b0), e.y[0] + r0 * Math.sin(b0), e.x[0] + r0 * Math.cos(b1), e.y[0] + r0 * Math.sin(b1)];
+      } else if (e.type === 'LWPOLYLINE' && e.x.length > 1) {
+        var isClosed = (e.flags & 1) === 1; nn = e.x.length;
+        if (isClosed) closed = true; else chain = [e.x[0], e.y[0], e.x[nn - 1], e.y[nn - 1]];
+        for (j = 0; j < (isClosed ? nn : nn - 1); j++) {
+          var jj = (j + 1) % nn, d = Math.hypot(e.x[jj] - e.x[j], e.y[jj] - e.y[j]), bu = e.b[j] || 0;
+          pt(e.x[j], e.y[j]);
+          if (bu && d) {
+            var th = 4 * Math.atan(bu), h = d * (1 - bu * bu) / (4 * bu);
+            var cx = (e.x[j] + e.x[jj]) / 2 - (e.y[jj] - e.y[j]) / d * h, cy = (e.y[j] + e.y[jj]) / 2 + (e.x[jj] - e.x[j]) / d * h;
+            var rr = Math.hypot(e.x[j] - cx, e.y[j] - cy), st = Math.atan2(e.y[j] - cy, e.x[j] - cx);
+            for (var t = 1; t < 32; t++) pt(cx + rr * Math.cos(st + th * t / 32), cy + rr * Math.sin(st + th * t / 32));
+            len += rr * Math.abs(th);
+          } else len += d;
+        }
+        if (!isClosed) pt(e.x[nn - 1], e.y[nn - 1]);
+      } else if (e.type === 'ELLIPSE' && e.x.length) {
+        var ex = e.x[0], ey = e.y[0], mx = e.ex || 0, my = e.ey || 0, R = Math.hypot(mx, my), q = e.r > 0 ? e.r : 1, an = Math.atan2(my, mx);
+        var q0 = e.p0 || 0, q1 = e.b[0] || 2 * Math.PI, sw = q1 - q0; if (sw <= 0) sw += 2 * Math.PI;
+        var full = sw > 2 * Math.PI - 1e-6, N = 64, at = function (t) { return [ex + R * Math.cos(t) * Math.cos(an) - R * q * Math.sin(t) * Math.sin(an), ey + R * Math.cos(t) * Math.sin(an) + R * q * Math.sin(t) * Math.cos(an)]; };
+        if (R > 0) {
+          var pv = null;
+          for (j = 0; j <= N; j++) { var pp = at(q0 + sw * j / N); if (pv) len += Math.hypot(pp[0] - pv[0], pp[1] - pv[1]); pv = pp; if (!(full && j === N)) pt(pp[0], pp[1]); }
+          if (full) closed = true; else { var a = at(q0), bb2 = at(q0 + sw); chain = [a[0], a[1], bb2[0], bb2[1]]; }
+        }
+      } else if (e.type === 'SPLINE' && e.x.length) {
+        for (j = 0; j < e.x.length; j++) pt(e.x[j], e.y[j]);
+        for (j = 1; j < e.x.length; j++) len += Math.hypot(e.x[j] - e.x[j - 1], e.y[j] - e.y[j - 1]);
+        closed = (e.flags & 1) === 1;
+      }
+      if (!isFinite(cb[0])) return;
+      var s = { bb: cb, len: len, closed: closed, round: e.type === 'CIRCLE', pl: [closed ? cp.concat([cp[0]]) : cp] };
+      if (closed) s.pa = e.type === 'CIRCLE' ? Math.PI * e.r * e.r : Math.abs(shoe(cp.concat([cp[0]]))) / 2;
+      all.push(s);
+      if (chain) segs.push(chain.concat([s, cp])); else shapes.push(s);
+    });
+    var bb = box();
+    all.forEach(function (s) { grow(bb, s.bb); });
+    if (!isFinite(bb[0])) throw new Error('no geometry');
+    var tol = Math.max(1e-6, 1e-4 * Math.hypot(bb[2] - bb[0], bb[3] - bb[1])), nodes = new Map(), par = [], deg = [];
+    var find = function (a) { while (par[a] !== a) a = par[a] = par[par[a]]; return a; };
+    var node = function (x, y) {
+      var gx = Math.round(x / tol), gy = Math.round(y / tol);
+      for (var dx = -1; dx <= 1; dx++) for (var dy = -1; dy <= 1; dy++) { var id = nodes.get((gx + dx) + ',' + (gy + dy)); if (id != null) return id; }
+      var nid = par.length; par.push(nid); deg.push(0); nodes.set(gx + ',' + gy, nid); return nid;
+    };
+    var endB = [], ends = segs.map(function (g, j) { var a = node(g[0], g[1]), b = node(g[2], g[3]); endB[j] = b; deg[a]++; deg[b]++; par[find(a)] = find(b); return a; });
+    var open = new Set(par.map(function (_, j) { return j; }).filter(function (j) { return deg[j] < 2; }).map(find)), groups = new Map();
+    segs.forEach(function (g, j) {
+      var r = find(ends[j]);
+      if (!groups.has(r)) { groups.set(r, { bb: box(), len: 0, closed: !open.has(r), ks: [], pl: [] }); shapes.push(groups.get(r)); }
+      grow(groups.get(r).bb, g[4].bb); groups.get(r).len += g[4].len; groups.get(r).ks.push(j); groups.get(r).pl.push(g[5]);
+    });
+    groups.forEach(function (g) {
+      if (!g.closed) return;
+      var at = new Map();
+      g.ks.forEach(function (j) { [ends[j], endB[j]].forEach(function (nd) { if (!at.has(nd)) at.set(nd, []); at.get(nd).push(j); }); });
+      if (Array.from(at.values()).some(function (v) { return v.length !== 2; })) return;
+      var used = new Set(), j = g.ks[0], fwd = true, nd = endB[j], s = 0;
+      while (j != null && !used.has(j)) {
+        used.add(j); s += shoe(fwd ? segs[j][5] : segs[j][5].slice().reverse());
+        var nk = at.get(nd).find(function (x) { return !used.has(x); }); if (nk == null) break;
+        fwd = ends[nk] === nd; nd = fwd ? endB[nk] : ends[nk]; j = nk;
+      }
+      if (used.size === g.ks.length) g.pa = Math.abs(s) / 2;
+    });
+    var un = { 1: 'inches', 2: 'feet', 4: 'mm', 5: 'cm', 6: 'm' }[uc];
+    var units = uc ? (un ? 'file says ' + un : 'units from file') : 'no units in the file, so we read it as mm';
+    if (!uc && Math.max(bb[2] - bb[0], bb[3] - bb[1]) * scale < 25) { scale = 25.4; units = 'no units in the file and it is small, so we read it as inches'; }
+    var mmS = function (b) { return [b[2] - b[0], b[3] - b[1]].map(function (v) { return v * scale; }).sort(function (x, y) { return y - x; }); };
+    var SHEETS = [[1189, 841], [841, 594], [594, 420], [420, 297], [297, 210], [279.4, 215.9], [431.8, 279.4], [558.8, 431.8], [863.6, 558.8], [1117.6, 863.6]];
+    var isSheet = function (b) { var m = mmS(b); return SHEETS.some(function (p) { return Math.abs(m[0] / p[0] - 1) < 0.03 && Math.abs(m[1] / p[1] - 1) < 0.03; }); };
+    var inside = function (s, o) { return s !== o && s.bb[0] >= o.bb[0] - tol && s.bb[1] >= o.bb[1] - tol && s.bb[2] <= o.bb[2] + tol && s.bb[3] <= o.bb[3] + tol; };
+    var area = function (s) { return (s.bb[2] - s.bb[0]) * (s.bb[3] - s.bb[1]); };
+    var inPath = function (P, o) { var c2 = 0; o.pl.forEach(function (p) { for (var j = 0; j + 1 < p.length; j++) { var A = p[j], B = p[j + 1];
+      if ((A[1] > P[1]) !== (B[1] > P[1]) && P[0] < A[0] + (P[1] - A[1]) * (B[0] - A[0]) / (B[1] - A[1])) c2++; } }); return c2 % 2 === 1; };
+    var insideP = function (s, o) {
+      if (!inside(s, o)) return false; if (!o.closed || !o.pl || !o.pl.length) return true;
+      var pts = [].concat.apply([], s.pl || []); if (!pts.length) return true;
+      var n3 = pts.length, qq = [0, Math.floor(n3 / 3), Math.floor(2 * n3 / 3)].map(function (j) { return pts[j]; });
+      return qq.filter(function (P) { return inPath(P, o); }).length >= 2;
+    };
+    var part = { bb: bb, len: all.reduce(function (t, s) { return t + s.len; }, 0) }, inner = shapes, cand = null, frameNote = '';
+    if (isSheet(bb) && shapes.some(function (s) { return s.closed && isSheet(s.bb); })) {
+      var frame = function (s) { var a1 = mmS(s.bb), A1 = mmS(bb); return isSheet(s.bb) || (a1[0] > 0.85 * A1[0] && a1[1] > 0.85 * A1[1]); };
+      cand = shapes.filter(function (s) { return s.closed && !frame(s); }).sort(function (x, y) { return area(y) - area(x); })[0];
+      if (cand && (shapes.some(function (s) { return s.closed && inside(s, cand); }) || shapes.some(function (s) { return !s.closed; }))) {
+        inner = shapes.filter(function (s) { return inside(s, cand); });
+        part = { bb: cand.bb, len: cand.len + inner.reduce(function (t, s) { return t + s.len; }, 0) };
+        frameNote = 'We left out the drawing border, so check the size.';
+      } else { cand = null; frameNote = 'This may be the drawing sheet, not the part.'; }
+    }
+    var isRound = function (s) { var w = s.bb[2] - s.bb[0], h = s.bb[3] - s.bb[1]; return s.round || (w > 0 && h > 0 && Math.abs(w / h - 1) < 0.03 && Math.abs(s.len / (Math.PI * (w + h) / 2) - 1) < 0.02); };
+    var set = null;
+    if (part.bb === bb) {
+      var cl = shapes.filter(function (s) { return s.closed; }), outer = function (s) { return cl.filter(function (o) { return insideP(s, o); }); };
+      var mid = function (s) { return [(s.bb[0] + s.bb[2]) / 2, (s.bb[1] + s.bb[3]) / 2]; };
+      var ring = function (s, o) { return isRound(s) && isRound(o) && Math.hypot(mid(s)[0] - mid(o)[0], mid(s)[1] - mid(o)[1]) <= tol + 0.02 * (o.bb[2] - o.bb[0]); };
+      var top = cl.filter(function (s) { var os = outer(s); if (os.length % 2) return false; if (!os.length) return true;
+        var hole = os.reduce(function (a, o) { return area(o) < area(a) ? o : a; }); return !ring(s, hole); });
+      if (top.length > 1 && shapes.every(function (s) { return top.indexOf(s) >= 0 || top.some(function (o) { return insideP(s, o); }); })) set = top;
+    }
+    var holes = set ? shapes.filter(function (s) { return s.closed; }).length - set.length : inner.filter(function (s) { return s.closed; }).length - (part.bb === bb ? 1 : 0);
+    var loops = set ? shapes.filter(function (s) { return s.closed && set.indexOf(s) < 0; }) : inner.filter(function (s) { return s.closed; });
+    var outline = cand;
+    if (!set && part.bb === bb && loops.length) { outline = loops.reduce(function (a, s) { return area(s) > area(a) ? s : a; }); loops.splice(loops.indexOf(outline), 1); }
+    holes = Math.max(0, holes);
+    var round = Math.min(holes, loops.filter(isRound).length);
+    var holeLen = loops.length === holes ? loops.reduce(function (t, s) { return t + s.len; }, 0) * scale : null;
+    var holeArea = loops.length === holes && loops.every(function (s) { return s.pa > 0; }) ? loops.reduce(function (t, s) { return t + s.pa; }, 0) * scale * scale : null;
+    var L = (part.bb[2] - part.bb[0]) * scale, W = (part.bb[3] - part.bb[1]) * scale;
+    return { L: L, W: W, cut: part.len * scale, holes: holes, round: round, holeLen: holeLen, holeArea: holeArea,
+      area: outline && outline.pa > 0 ? Math.min(outline.pa * scale * scale, L * W) : null,
+      parts: set ? set.length : 1, units: units, inch: uc === 1 || (scale === 25.4 && !uc), frameNote: frameNote };
+  }
+
+  var geo = null, geoFile = null, dxfMsg = el('dxfmsg'), DXF_HINT = dxfMsg.textContent;
+  var holeTxt = function (n, r) { return n === 0 ? 'no holes' : n + (n === 1 ? ' hole or cutout' : ' holes and cutouts') + (r ? ' (' + r + ' round)' : ''); };
+  var lockSizes = function (on) { ['pL', 'pW', 'pHoles'].forEach(function (n) { E[n].readOnly = on; }); el('nodxf').hidden = !on; };
+  E.dxf.addEventListener('change', function () {
+    var file = E.dxf.files[0];
+    if (!file) return;
+    if (!/\.dxf$/i.test(file.name)) { dxfMsg.textContent = 'We read DXF files here. Add other files under Send it below.'; return; }
+    dxfMsg.textContent = 'Reading ' + file.name + '…';
+    file.text().then(function (t) {
+      var g = fromDxf(t);
+      if (![g.L, g.W].every(function (v) { return isFinite(v) && v > 0 && v < 1e5; })) throw new Error('bad size');
+      geo = g; geoFile = file;
+      E.pL.value = Math.round(g.L) + ' mm'; E.pW.value = Math.round(g.W) + ' mm'; E.pHoles.value = g.holes;
+      lockSizes(true);
+      var inch = function (v) { return +(v / 25.4).toFixed(2); };
+      dxfMsg.textContent = 'From ' + file.name + ': ' + (g.inch ? inch(g.L) + ' × ' + inch(g.W) + ' in (' + Math.round(g.L) + ' × ' + Math.round(g.W) + ' mm)' : Math.round(g.L) + ' × ' + Math.round(g.W) + ' mm') +
+        ', ' + holeTxt(g.holes, g.round) + ', ' + (g.cut / 1000).toFixed(1) + ' m of cutting (' + g.units + '). ' + g.frameNote;
+      update();
+    }).catch(function () {
+      geo = null; geoFile = file; lockSizes(false);
+      dxfMsg.textContent = "We couldn't read " + file.name + ". Type the sizes below. We'll still send your file with the request.";
+      update();
+    });
+  });
+  el('nodxf').addEventListener('click', function () { geo = null; geoFile = null; E.dxf.value = ''; lockSizes(false); dxfMsg.textContent = DXF_HINT; update(); });
+
+  var isPanel = function () { return E.kind.value === 'Flat panel'; };
+  function specOf() {
+    var q = qtyN();
+    if (!(q >= 1)) return { ask: 'Enter a whole number, 1 or more, for the quantity.' };
+    if (q > 10000) return { review: 'More than 10,000 parts' };
+    if (geo && geo.parts > 1) return { review: 'Your file has ' + geo.parts + ' different parts. We price sets by hand.' };
+    var S = {}, ask = [], lbl = { pL: 'Length', pW: 'Width', pT: 'Thickness', pSkin: 'Outer layers' }, cored = E.pCore.value === 'core';
+    ['pL', 'pW', 'pT'].concat(cored ? ['pSkin'] : []).forEach(function (n) {
+      var r = size(E[n].value);
+      S[n] = r;
+      var h = document.querySelector('[data-for=' + n + ']');
+      if (h) h.textContent = r.note ? r.note : h.dataset.t || (h.dataset.t = h.textContent);
+      if (!(r.v > 0)) ask.push(lbl[n] + ': type a size, like 600 mm or 24 in.');
+    });
+    if (ask.length) return { ask: ask.join(' ') };
+    if (!geo) {
+      var anyIn = ['pL', 'pW', 'pT', 'pSkin'].some(function (n) { return S[n] && S[n].imp; });
+      var lim = Math.min(S.pL.v, S.pW.v) / 4 < S.pT.v ? 60 : 25;
+      ['pL', 'pW'].forEach(function (n) {
+        var r = S[n], v = E[n].value.trim();
+        if (r.bare && (r.v < lim || (anyIn && r.v <= 60))) ask.push(lbl[n] + ' ' + v + ': mm or inches? Type ' + v + ' mm or ' + v + ' in.');
+      });
+      if (ask.length) return { ask: ask.join(' ') };
+    }
+    var L = geo ? Math.round(geo.L) : S.pL.v, W = geo ? Math.round(geo.W) : S.pW.v, holes = Math.max(0, Math.round(+E.pHoles.value || 0));
+    var spec = { units: 'mm', outline: { bbox: [L, W] }, finish: E.pFin.value, qty: q,
+      laminate: cored ? { family: E.pMat.value, type: 'sandwich', thickness: S.pT.v, skin: S.pSkin.v } : { family: E.pMat.value, thickness: S.pT.v } };
+    if (geo) {
+      var hp = geo.holeLen != null ? geo.holeLen : 0;
+      spec.outline.perimeter = Math.max(0, geo.cut - hp);
+      if (geo.area) spec.outline.area = Math.min(geo.area, L * W);
+      if (geo.holes) spec.cutouts = { count: geo.holes, total_perimeter: hp, round_count: geo.round };
+      if (geo.holes && geo.holeArea != null) spec.cutouts.total_area = geo.holeArea;
+    } else if (holes) spec.cutouts = { count: holes };
+    var mat = E.pMat.options[E.pMat.selectedIndex].text, fin = E.pFin.options[E.pFin.selectedIndex].text;
+    var desc = 'Flat panel ' + L + ' × ' + W + ' × ' + S.pT.v + ' mm, ' + mat + ', ' + (cored ? 'foam core with ' + S.pSkin.v + ' mm outer layers' : 'solid') + ', ' + fin + ', ' +
+      holeTxt(geo ? geo.holes : holes, geo ? geo.round : 0) + (geo ? ', outline from ' + geoFile.name + ' (' + (geo.cut / 1000).toFixed(2) + ' m of cutting)' : '') + '. Quantity ' + q + '.';
+    return { spec: spec, desc: desc, q: q };
+  }
+
+  var est = el('est'), cur = null, seq = 0, timer = 0;
+  function show(state) {
+    var tot = el('tot'), warn = el('warn'), per = el('per'), props = el('props'), more = el('more');
+    tot.className = 'tot'; warn.innerHTML = ''; per.textContent = ''; props.textContent = ''; more.hidden = true;
+    el('ref').textContent = ref;
+    el('estnote').hidden = !(state.res && state.res.status !== 'review');
+    if (state.kind === 'other') {
+      el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Priced by review';
+      per.textContent = "Send the details below and we'll email your price within 1 working day.";
+      return payState();
+    }
+    if (state.ask) { el('estlb').textContent = 'Check your sizes'; tot.className = 'tot rv'; tot.textContent = 'Check your sizes'; warn.innerHTML = '<div>' + esc(state.ask) + '</div>'; return payState(); }
+    if (state.review || state.fail || state.offline) {
+      el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Priced by review';
+      per.textContent = "Press Send and we'll email your price within 1 working day.";
+      if (state.review) warn.innerHTML = '<div>' + esc(state.review) + '</div>';
+      if (state.fail) warn.innerHTML = '<div>' + esc(state.fail) + '</div>';
+      return payState();
+    }
+    var r = state.res, x = r.quantities[0], fl = r.flags || {};
+    if (r.status === 'review' || x.list_price == null) {
+      el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Priced by review';
+      per.textContent = "Press Send and we'll email your price within 1 working day.";
+      warn.innerHTML = (fl.reasons || []).map(function (s) { return '<div>' + esc(s) + '</div>'; }).join('');
+      return payState();
+    }
+    el('estlb').textContent = 'Budget estimate';
+    tot.textContent = usd(x.list_price);
+    per.textContent = usd(x.list_price_per_part) + ' per panel × ' + x.qty + '. Ready to ship by ' + longDate(readyBy(x)) + '.' + (x.note ? ' ' + x.note + '.' : '');
+    var p = r.properties;
+    if (p) {
+      props.textContent = 'Calculated: ' + p.thickness_mm + ' mm thick, ' + p.part_mass_kg + ' kg per panel. ' + p.aluminum_6061_equivalent.text;
+      var fp = p.first_ply_failure_N_per_mm || {};
+      var rows = [['Weight per m²', p.areal_weight_kg_m2 + ' kg'], ['Stiffness Ex / Ey' + (p.core ? ' (one skin)' : ''), p.in_plane.Ex_GPa + ' / ' + p.in_plane.Ey_GPa + ' GPa'],
+        ['Bending EI per mm width', p.bending.EI_x_Nmm2_per_mm.toLocaleString('en-US') + ' N·mm²'], ['First ply failure, tension', fp.Nx_tension + ' N/mm'],
+        ['First ply failure, compression', fp.Nx_compression + ' N/mm'], ['First ply failure, shear', fp.Nxy_shear + ' N/mm']];
+      if (p.core) rows.push(['Core shear capacity', p.core.shear_capacity_N_per_mm + ' N/mm']);
+      el('dl').innerHTML = rows.map(function (rw) { return '<dt>' + esc(rw[0]) + '</dt><dd>' + esc(rw[1]) + '</dd>'; }).join('') +
+        '<dt style="grid-column:1/-1">' + esc(p.label) + '</dt>';
+      more.hidden = false;
+    }
+    warn.innerHTML = (fl.reasons || []).concat(fl.notes || []).map(function (s) { return '<div>' + esc(s) + '</div>'; }).join('');
+    payState();
+  }
+
+  var cancel = function () { clearTimeout(timer); seq++; est.classList.remove('busy'); };
+  function update() {
+    var panel = isPanel();
+    el('pf').hidden = !panel; el('of').hidden = panel;
+    el('skinL').hidden = E.pCore.value !== 'core';
+    if (!panel) { cancel(); cur = { kind: 'other' }; return show(cur); }
+    var s = specOf();
+    if (s.ask || s.review) { cancel(); cur = s; return show(s); }
+    if (!QUOTE_URL) { cur = { offline: true, s: s }; return show(cur); }
+    var key = JSON.stringify(s.spec);
+    if (cur && cur.key === key) { if (!cur.pending) show(cur); return; }
+    cancel();
+    est.classList.add('busy');
+    if (!cur || !cur.res) { el('tot').textContent = 'Pricing…'; }
+    el('estlb').textContent = 'Pricing…';
+    cur = { key: key, s: s, pending: true };
+    var my = ++seq;
+    timer = setTimeout(function () { price(s, key, my); }, 450);
+    payState();
+  }
+  function price(s, key, my) {
+    var ctl = window.AbortController ? new AbortController() : null, to = setTimeout(function () { if (ctl) ctl.abort(); }, 15000);
+    fetch(QUOTE_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, signal: ctl ? ctl.signal : undefined,
+      body: JSON.stringify({ site_key: SITE_KEY, origin: location.origin, cid: cid, spec: s.spec }) })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (my !== seq) return;
+        if (r.error) cur = { key: key, s: s, fail: r.status === 429 ? r.error : 'We could not price this part: ' + r.error + '. Check the sizes, or press Send and we will price it by hand.' };
+        else cur = { key: key, s: s, res: r, at: Date.now() };
+      })
+      .catch(function () { if (my === seq) cur = { key: key, s: s, fail: "We couldn't get a price just now. Press Send and we'll email your price within 1 working day." }; })
+      .then(function () { clearTimeout(to); if (my !== seq) return; est.classList.remove('busy'); show(cur); });
+  }
+
+  var readyBy = function (x) { var a = String(x.ready_by).split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); };
+  var longDate = function (d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); };
+  var shortDate = function (d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
+  var addWorkDays = function (n) { var d = new Date(today); while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6) n--; } return d; };
+  var extraFiles = function () { return Array.prototype.slice.call(E.files.files).filter(function (x) { return !(geoFile && geo && x.name === geoFile.name && x.size === geoFile.size); }); };
+  function payOK() {
+    var x = cur && cur.res && cur.res.status === 'instant' && cur.res.quantities[0];
+    var why = '';
+    if (!PAY_ON || PAID || !QUOTE_URL || !x || x.list_price == null || !isPanel() || cur.pending) return { ok: false, why: '' };
+    if (geoFile && !geo) why = "We couldn't read your DXF, so this price is from the sizes you typed. Press Send and we'll check your file and reply with a price.";
+    else if (extraFiles().length) why = "You added files, so we'll check them first. Press Send and we'll reply with a firm price.";
+    else if (E.need.value) {
+      var ship = readyBy(x); ship.setDate(ship.getDate() + 7);
+      var nd = E.need.value.split('-').map(Number), need = new Date(nd[0], nd[1] - 1, nd[2]);
+      if (need < ship) why = 'To pay by card now, pick ' + shortDate(ship) + ' or later. That leaves a week for shipping. Or press Send and we will see what we can do.';
+    }
+    return { ok: !why, why: why, x: x };
+  }
+  function payState() {
+    var p = payOK();
+    el('pay').hidden = !p.ok; el('payterms').hidden = !p.ok;
+    el('paynote').textContent = p.why;
+  }
+
+  var text = function (pay) {
+    var lines = ['Quote request ' + ref, ''];
+    if (isPanel() && cur && cur.s) {
+      lines.push(cur.s.desc);
+      var r = cur.res, x = r && r.quantities[0];
+      if (x && x.list_price != null) {
+        lines.push('Price shown: ' + usd(x.list_price) + ' budget estimate (' + usd(x.list_price_per_part) + ' per panel), server quote ' + r.quote_id + ', status ' + r.status + ', ready to ship by ' + x.ready_by + '.');
+        if (x.note) lines.push(x.note + '.');
+        if (r.properties) lines.push('Calculated: ' + r.properties.thickness_mm + ' mm thick, ' + r.properties.part_mass_kg + ' kg per panel.');
+        if (r.flags && (r.flags.reasons.length || r.flags.notes.length)) lines.push('Notes: ' + r.flags.reasons.concat(r.flags.notes).join(' '));
+      } else lines.push('Priced by review' + (r && r.flags ? ': ' + r.flags.reasons.join('; ') : cur.review ? ': ' + cur.review : cur.fail ? ' (no instant price: ' + cur.fail + ')' : '') + '.');
+      if (pay) lines.push('Card checkout: the buyer pressed Order and pay by card. The pay link is made from server quote ' + r.quote_id + '.');
+    } else {
+      lines.push('Part type: ' + E.kind.value, 'Quantity: ' + E.qty.value, 'Material: ' + E.mat.value, 'Priced by review.');
+    }
+    lines.push('', 'Need by: ' + (E.need.value || 'flexible'), 'Name: ' + E.name.value.trim(), 'Company: ' + E.org.value.trim(), 'Email: ' + E.email.value.trim(), '', 'Notes: ' + E.notes.value.trim());
+    return lines.join('\n');
   };
   var b64 = function (file) {
-    return new Promise(function (ok, no) {
-      var r = new FileReader();
-      r.onload = function () { ok(String(r.result).split(',')[1]); };
-      r.onerror = no;
-      r.readAsDataURL(file);
-    });
+    return new Promise(function (ok, no) { var r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = no; r.readAsDataURL(file); });
   };
-  var mailto = function (ref) {
-    location.href = 'mailto:casey@wyspa.tech?subject=' + encodeURIComponent('Quote request ' + ref) + '&body=' + encodeURIComponent(text(ref));
-  };
+  var mailto = function () { location.href = 'mailto:casey@wyspa.tech?subject=' + encodeURIComponent('Quote request ' + ref) + '&body=' + encodeURIComponent(text(false)); };
+  var allFiles = function () { var l = Array.prototype.slice.call(E.files.files); if (geoFile && !l.some(function (x) { return x.name === geoFile.name && x.size === geoFile.size; })) l.unshift(geoFile); return l; };
   var checkFiles = function () {
-    var list = Array.prototype.slice.call(f.elements.files.files);
-    var bad = list.filter(function (x) { return !OK.test(x.name); })[0];
-    var size = list.reduce(function (t, x) { return t + x.size; }, 0);
-    ferr.textContent = bad ? 'We can\'t take ' + bad.name + '. Send STEP, STL, DXF, PDF, an image, or a zip.'
+    var list = allFiles(), ferr = el('ferr');
+    var bad = list.filter(function (x) { return !OK.test(x.name); })[0], sz = list.reduce(function (t, x) { return t + x.size; }, 0);
+    ferr.textContent = bad ? "We can't take " + bad.name + '. Send STEP, STL, DXF, PDF, an image, or a zip.'
       : list.length > 10 ? 'Up to 10 files, please. Zip them if you have more.'
-      : size > 25e6 ? 'Files are over 25 MB. Zip them, or send without them and we\'ll email you an upload link.' : '';
+      : sz > 25e6 ? "Files are over 25 MB. Zip them, or send without them and we'll email you an upload link." : '';
     return ferr.textContent ? null : list;
   };
-  f.elements.files.addEventListener('change', checkFiles);
-  f.addEventListener('submit', function (ev) {
-    ev.preventDefault();
+  function finish(pay, r) {
+    el('dref').textContent = ref; el('to').textContent = E.email.value.trim();
+    f.hidden = true; el('done').hidden = false; el('done').focus();
+  }
+  function send(pay) {
     msg.textContent = '';
     if (!f.reportValidity()) return;
     var list = checkFiles();
     if (!list) return;
-    var ref = newRef();
-    go.disabled = true;
+    var go = el('go'), pb = el('pay');
+    go.disabled = pb.disabled = true;
     msg.textContent = list.length ? 'Uploading ' + list.length + ' file' + (list.length > 1 ? 's' : '') + '…' : 'Sending…';
-    Promise.all(list.map(function (x) {
-      return b64(x).then(function (data) { return { name: x.name, type: x.type, data: data }; });
-    })).then(function (files) {
-      var body = JSON.stringify({ qid: ref, email: f.elements.email.value.trim(), website: f.elements.website.value, summary: text(ref), files: files });
-      return fetch(URL_IN, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body });
-    }).then(function (r) { return r.json(); }).then(function (r) {
-      if (!r.ok) throw new Error(r.error || 'failed');
-      el('ref').textContent = ref;
-      el('to').textContent = f.elements.email.value.trim();
-      f.hidden = true;
-      el('done').hidden = false;
-      el('done').focus();
-    }).catch(function () {
-      msg.textContent = 'Sending failed. Your email app will open with the request filled in. Attach your files there. If nothing opens, email casey@wyspa.tech.';
-      setTimeout(function () { mailto(ref); }, 1500);
-    }).then(function () { go.disabled = false; });
-  });
+    var sent = false;
+    Promise.all(list.map(function (x) { return b64(x).then(function (data) { return { name: x.name, type: x.type, data: data }; }); }))
+      .then(function (files) {
+        return fetch(URL_IN, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ qid: ref, email: E.email.value.trim(), website: E.website.value, summary: text(pay), files: files }) });
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (!r.ok) throw new Error(r.error || 'failed');
+        sent = true;
+        if (!pay) return finish(false);
+        msg.textContent = 'Request sent. Your reference is ' + ref + '. Getting the card payment ready…';
+        return fetch(QUOTE_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ site_key: SITE_KEY, origin: location.origin, cid: cid, action: 'checkout', quote_id: cur.res.quote_id, qty: cur.res.quantities[0].qty, ref: ref, email: E.email.value.trim() }) })
+          .then(function (r2) { return r2.json(); })
+          .then(function (c) {
+            if (c.ok && /^https:\/\/([a-z0-9-]+\.)*(square\.link|squareup\.com|square\.site)\//i.test(c.checkoutUrl || '')) {
+              msg.textContent = 'Request sent. Your reference is ' + ref + '. Taking you to the card payment…';
+              location.href = c.checkoutUrl; return;
+            }
+            if (c.expired) { cur = null; update(); msg.textContent = c.error; return; }
+            msg.textContent = c.ok ? c.message || "Request sent. We'll email you a pay link within 1 working day." : 'Request sent. Your reference is ' + ref + '. ' + (c.error || "We'll email you a pay link within 1 working day.");
+          })
+          .catch(function () { msg.textContent = 'Request sent. Your reference is ' + ref + ". We'll email you a pay link within 1 working day."; });
+      })
+      .catch(function () {
+        if (sent) return;
+        msg.textContent = 'Sending failed. Your email app will open with the request filled in. Attach your files there. If nothing opens, email casey@wyspa.tech.';
+        setTimeout(mailto, 1500);
+      })
+      .then(function () { go.disabled = pb.disabled = false; });
+  }
+  f.addEventListener('submit', function (ev) { ev.preventDefault(); send(false); });
+  el('pay').addEventListener('click', function () { if (payOK().ok) send(true); });
+  f.addEventListener('input', function (ev) { if (ev.target.name === 'files') checkFiles(); if (['name', 'email', 'org', 'notes', 'files', 'website'].indexOf(ev.target.name) < 0) update(); else payState(); });
+  f.addEventListener('change', function (ev) { if (ev.target.name === 'dxf') return; if (ev.target.name === 'files') { checkFiles(); payState(); } else update(); });
   el('again').addEventListener('click', function () {
-    f.reset();
-    msg.textContent = '';
-    ferr.textContent = '';
-    el('done').hidden = true;
-    f.hidden = false;
-    f.elements.name.focus();
+    f.reset(); geo = null; geoFile = null; lockSizes(false); dxfMsg.textContent = DXF_HINT; ref = newRef(); cur = null;
+    msg.textContent = ''; el('ferr').textContent = ''; el('done').hidden = true; f.hidden = false; update(); E.name.focus();
   });
+  update();
 })();
 </script>
 </body>
