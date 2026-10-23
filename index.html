@@ -129,7 +129,7 @@ html,body{margin:0;background:#eef2f3}
 <header class="hero">
  <div>
   <h1>Composite parts, <em>priced</em> in seconds.</h1>
-  <p class="lead">Flat panels get a price right here. Molded parts and drone rotors: send your file and we email your price within 1 working day. No account needed.</p>
+  <p class="lead">Price a flat panel right here. For molded parts and drone rotors, send your file and we email a price within 1 working day. No account needed.</p>
   <div class="cta"><a class="btn pr" href="#quote">Get a price</a><a class="btn" href="#how">How it works</a></div>
  </div>
  <figure class="fig">
@@ -167,7 +167,7 @@ html,body{margin:0;background:#eef2f3}
 </section>
 
 <section id="materials">
- <div class="sh"><div class="lb">Materials</div><div><h2>What it's made of</h2><p>Not sure what to pick? Tell us what the part has to carry and we choose the layup. Panel prices come with calculated weight and stiffness.</p></div></div>
+ <div class="sh"><div class="lb">Materials</div><div><h2>What it's made of</h2><p>Not sure what to pick? Tell us what the part has to carry and we choose for you. Panel prices come with calculated weight and stiffness.</p></div></div>
  <ul class="pp">
   <li><b>Carbon fiber.</b> Twill weave. Stiff and light.</li>
   <li><b>Carbon prepreg.</b> Lighter and stronger, with a cleaner finish.</li>
@@ -182,13 +182,13 @@ html,body{margin:0;background:#eef2f3}
  <div class="sh"><div class="lb">How it works</div><div><h2>Three steps</h2></div></div>
  <ol class="steps">
   <li><h3>Get a price</h3><p>Flat panels: type the size or add a DXF and see the price. Other parts: send the details and we email a price within 1 working day. Every order is at least $1,500.</p></li>
-  <li><h3>Order it</h3><p>Pay by card, or press Send for a firm quote. Bank transfer and PO go through Send.</p></li>
+  <li><h3>Order it</h3><p>Pay by card, or press Send for a firm quote. Paying by bank transfer or PO? Use Send.</p></li>
   <li><h3>We make it</h3><p>We check every order before we start. Then we make and ship your parts.</p></li>
  </ol>
 </section>
 
 <section id="quote">
- <div class="sh"><div class="lb">Price</div><div><h2>Get a price</h2><p>Flat panels are priced as you type. For other parts, send the details and we email your price within 1 working day.</p></div></div>
+ <div class="sh"><div class="lb">Price</div><div><h2>Get a price</h2><p>Flat panels are priced as you type. Other parts get a price by email within 1 working day.</p></div></div>
  <form id="rf" novalidate>
   <div class="qt">
    <div>
@@ -202,7 +202,7 @@ html,body{margin:0;background:#eef2f3}
      <label>Quantity<input name="qty" inputmode="numeric" autocomplete="off" value="10"></label>
     </fieldset>
     <fieldset id="pf">
-     <label class="full">Outline file (optional)<input name="dxf" type="file" accept=".dxf"><span class="hint" id="dxfmsg">Add a DXF and we read the outline and holes. Or type the sizes below.</span><button type="button" class="link" id="nodxf" hidden>Type the sizes instead</button></label>
+     <label class="full">DXF outline (optional)<input name="dxf" type="file" accept=".dxf"><span class="hint" id="dxfmsg">Add a DXF and we read the outline and holes. Or type the sizes below.</span><button type="button" class="link" id="nodxf" hidden>Type the sizes instead</button></label>
      <label>Length<input name="pL" value="600"><span class="hint" data-for="pL">mm or in. Up to 2390 mm.</span></label>
      <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm.</span></label>
      <label id="tL">Thickness<input name="pT" value="2"><span class="hint" data-for="pT">mm or in, total.</span></label>
@@ -263,11 +263,11 @@ html,body{margin:0;background:#eef2f3}
     <div class="tot" id="tot"></div>
     <div class="note" style="margin-top:0" id="per"></div>
     <div class="note" id="props"></div>
-    <details id="more" hidden><summary>More calculated properties</summary><dl id="dl"></dl></details>
+    <details id="more" hidden><summary>More details</summary><dl id="dl"></dl></details>
     <div class="warn need" id="needw"></div>
     <div class="warn" id="warn"></div>
     <p class="note" id="fnotes"></p>
-    <p class="note" id="estnote">Shipping not included. This is a budget estimate. We check every part before we start, and the price may change after that check.</p>
+    <p class="note" id="estnote">Shipping not included. We check every part before we start, and the price may change after that.</p>
    </aside>
   </div>
 
@@ -278,13 +278,13 @@ html,body{margin:0;background:#eef2f3}
     <label>Email<input name="email" type="email" autocomplete="email" required></label>
     <label>Company (optional)<input name="org" autocomplete="organization"></label>
     <label id="needL">Need by (optional)<input name="need" type="date"></label>
-    <label class="full" id="notesL">Notes<textarea name="notes" rows="4" placeholder="What it's for, loads, weight or finish targets"></textarea></label>
+    <label class="full" id="notesL">Notes<textarea name="notes" rows="4" placeholder="What it's for, loads, weight, finish"></textarea></label>
     <label class="full" id="filesL">Files: CAD, drawing or photo<input name="files" type="file" multiple accept=".step,.stp,.iges,.igs,.stl,.obj,.3dm,.dxf,.dwg,.pdf,.sldprt,.sldasm,.x_t,.x_b,.f3d,.png,.jpg,.jpeg,.zip"><span class="hint" id="fhint">STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.</span><span class="err" id="ferr"></span></label>
     <label class="trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
    </fieldset>
    <p class="note" id="paynote"></p>
    <div class="cta"><button class="btn pr" type="submit" id="go">Send</button><button class="btn" type="button" id="pay" hidden>Order and pay by card</button></div>
-   <p class="note" id="payterms" hidden>You pay the price shown, in full, by card. Shipping is extra. We email the shipping price before we ship.<br>We check every order before we start. If the price changes, you choose: pay the difference or get a full refund. You can cancel for a full refund any time before we start. Paying by bank transfer or PO? Use Send.</p>
+   <p class="note" id="payterms" hidden>You pay the full price shown, by card. Shipping is extra. We email that price before we ship.<br>We check every order before we start. If the price changes, you choose: pay the difference or get a full refund. Cancel any time before we start for a full refund. Paying by bank transfer or PO? Use Send.</p>
    <p class="note" id="msg" aria-live="polite"></p>
   </div>
  </form>
@@ -292,7 +292,7 @@ html,body{margin:0;background:#eef2f3}
   <h3>Thanks, we have it.</h3>
   <p>Your reference is <b id="dref"></b>. We'll email <b id="to"></b> within 1 working day.</p>
   <p>Nothing is charged until you approve the quote. Then you can pay by card or bank transfer.</p>
-  <div class="cta"><button class="btn" type="button" id="again">Send another request</button></div>
+  <div class="cta"><button class="btn" type="button" id="again">Send another</button></div>
  </div>
 </section>
 
