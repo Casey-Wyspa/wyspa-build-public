@@ -633,6 +633,8 @@ html,body{margin:0;background:#eef2f3}
       var r = S[n], v = E[n].value.trim();
       if (r.bare && r.v > 0 && ((n !== 'mH' && r.v < 25) || (anyIn && r.v <= 60))) ask.push(lbl[n] + ': is ' + v + ' mm or inches? Type ' + v + ' mm or ' + v + ' in.');
     });
+    var wr = S.mWall, wv = E.mWall.value.trim();
+    if (wr.bare && (wr.v < 0.5 || (anyIn && wr.v < 1))) ask.push('Wall thickness: is ' + wv + ' mm or inches? Type ' + wv + ' mm or ' + wv + ' in.');
     if (ask.length) return { ask: ask.join(' ') };
     var L = S.mL.v, W = S.mW.v;
     if (W > L) { var sw = L; L = W; W = sw; }
@@ -686,6 +688,10 @@ html,body{margin:0;background:#eef2f3}
         if (r.bare && (r.v < lim || (anyIn && r.v <= 60))) ask.push(lbl[n] + ' ' + v + ': mm or inches? Type ' + v + ' mm or ' + v + ' in.');
       });
       if (ask.length) return { ask: ask.join(' ') };
+    }
+    if (!cored && S.pT.bare && (S.pT.v < 0.5 || ((!geo && ['pL', 'pW'].some(function (n) { return S[n].imp; })) && S.pT.v < 1))) {
+      var tv = E.pT.value.trim();
+      return { ask: 'Thickness ' + tv + ': mm or inches? Type ' + tv + ' mm or ' + tv + ' in.' };
     }
     var L = geo ? Math.round(geo.L) : S.pL.v, W = geo ? Math.round(geo.W) : S.pW.v, holes = Math.max(0, Math.round(+E.pHoles.value || 0));
     if (W > L) { var sw = L; L = W; W = sw; }
