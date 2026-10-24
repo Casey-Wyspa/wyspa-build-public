@@ -281,6 +281,7 @@ html,body{margin:0;background:#eef2f3}
      </select></label>
      <label>Mold<select name="mMold">
       <option value="new">New mold from my file</option>
+      <option value="sketch">New mold from my sketch</option>
       <option value="repeat">Reuse my Wyspa mold</option>
      </select></label>
      <label class="full">Shape<select name="mShape">
@@ -599,7 +600,7 @@ html,body{margin:0;background:#eef2f3}
   var ofs = el('of'), sfs = el('sf'), trap = sfs.querySelector('.trap');
   var FHINT = { panel: 'STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.',
     rotor: 'Add your rotor file if you have one: STEP, STL, PDF or images. Up to 10 files, 25 MB total.',
-    molded: 'Add your part file if you have one: STEP, STL, PDF or images. Up to 10 files, 25 MB total.', other: 'STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all.' };
+    molded: 'Add your part file if you have one: STEP, STL, PDF or images. Up to 10 files, 25 MB total.', sketch: 'Add your sketch: PDF or images. Up to 10 files, 25 MB total.', other: 'STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all.' };
   function layout(mode) {
     var priced = mode !== 'other';
     ['needL', 'notesL', 'filesL'].forEach(function (id) {
@@ -609,10 +610,11 @@ html,body{margin:0;background:#eef2f3}
     });
     el('go').textContent = 'Send for a quote';
     el('sendH').textContent = priced ? 'Send it' : 'Your details';
-    el('fhint').textContent = FHINT[mode];
+    el('fhint').textContent = FHINT[mode === 'molded' && E.mMold.value === 'sketch' ? 'sketch' : mode];
   }
   var isRotor = function () { return E.kind.value === 'Drone rotor'; };
   var isMolded = function () { return E.kind.value === 'Molded part'; };
+  var SKETCH = "We'll draw the CAD from your sketch and add it to the price we confirm.";
   var unitWord = function () { return isRotor() ? 'rotor' : isMolded() ? 'part' : 'panel'; };
   function moldedSpec() {
     var q = qtyN();
@@ -639,10 +641,11 @@ html,body{margin:0;background:#eef2f3}
     var L = S.mL.v, W = S.mW.v;
     if (W > L) { var sw = L; L = W; W = sw; }
     var txt = function (n) { return E[n].options[E[n].selectedIndex].text; };
-    var spec = { kind: 'molded', units: 'mm', length: L, width: W, depth: S.mH.v, wall: S.mWall.v, material: E.mMat.value, mold: E.mMold.value, qty: q };
+    var sk = E.mMold.value === 'sketch';
+    var spec = { kind: 'molded', units: 'mm', length: L, width: W, depth: S.mH.v, wall: S.mWall.v, material: E.mMat.value, mold: sk ? 'new' : E.mMold.value, qty: q };
     if (E.mShape.value) spec.shape = E.mShape.value;
-    var desc = 'Molded part ' + L + ' × ' + W + ' × ' + S.mH.v + ' mm, wall ' + S.mWall.v + ' mm, ' + txt('mMat') + ', shape: ' + txt('mShape').toLowerCase() + ', mold: ' + txt('mMold').toLowerCase() + '. Quantity ' + q + '.';
-    return { spec: spec, desc: desc, q: q };
+    var desc = 'Molded part ' + L + ' × ' + W + ' × ' + S.mH.v + ' mm, wall ' + S.mWall.v + ' mm, ' + txt('mMat') + ', shape: ' + txt('mShape').toLowerCase() + ', ' + (sk ? 'mold: new, from sketch (no CAD yet, we draw it)' : 'mold: ' + txt('mMold').toLowerCase()) + '. Quantity ' + q + '.';
+    return { spec: spec, desc: desc, q: q, extra: sk ? SKETCH : '' };
   }
   var RD_HINT = el('rDh').textContent;
   function rotorSpec() {
@@ -734,11 +737,11 @@ html,body{margin:0;background:#eef2f3}
       if (state.fail) warn.innerHTML = '<div>' + esc(state.fail) + '</div>';
       return payState();
     }
-    var r = state.res, x = r.quantities[0], fl = r.flags || {};
+    var r = state.res, x = r.quantities[0], fl = r.flags || {}, xl = state.s && state.s.extra ? [state.s.extra] : [];
     if (r.status === 'review' || x.list_price == null) {
       el('estlb').textContent = 'Priced by review'; tot.className = 'tot rv'; tot.textContent = 'Priced by review';
       per.textContent = "Press Send and we'll email your price within 1 working day.";
-      warn.innerHTML = lines((fl.reasons || []).map(plain));
+      warn.innerHTML = lines((fl.reasons || []).map(plain).concat(xl));
       return payState();
     }
     el('estlb').textContent = 'Budget estimate';
@@ -756,7 +759,7 @@ html,body{margin:0;background:#eef2f3}
         '<dt style="grid-column:1/-1">' + esc(p.label) + '</dt>';
       more.hidden = false;
     }
-    warn.innerHTML = lines((fl.reasons || []).map(plain));
+    warn.innerHTML = lines((fl.reasons || []).map(plain).concat(xl));
     el('fnotes').textContent = (fl.notes || []).filter(function (s) { return !/edges/i.test(s); }).join(' ');
     payState();
   }
