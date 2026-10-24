@@ -182,7 +182,7 @@ html,body{margin:0;background:#eef2f3}
  <div class="sh"><div class="lb">How it works</div><div><h2>Three steps</h2></div></div>
  <ol class="steps">
   <li><h3>Get a price</h3><p>Flat panels: type the size or add a DXF to see the price. Drone rotors: pick the size to see an estimate. Molded parts: type the size to see an estimate. Other parts: send the details and we'll email a price within 1 working day. Orders start at $1,500.</p></li>
-  <li><h3>Order it</h3><p>Pay by card, or press Send for a firm quote. Paying by bank transfer or PO? Use Send.</p></li>
+  <li><h3>Order it</h3><p>Pay by card, or press Send for a quote and we'll email a firm price. Paying by bank transfer or PO? Send for a quote.</p></li>
   <li><h3>We make it</h3><p>We check every order before we start. Then we make and ship your parts.</p></li>
  </ol>
 </section>
@@ -260,7 +260,7 @@ html,body{margin:0;background:#eef2f3}
     <fieldset id="rof" hidden>
      <label>Diameter<input name="rD" value="15"><span class="hint" id="rDh">Inches or mm, like 22 in.</span></label>
      <label>Blades<select name="rB"><option>2</option><option>3</option><option>4</option></select></label>
-     <label>Spin direction<select name="rSpin"><option value="one">All one way</option><option value="both">Half each way</option></select></label>
+     <label>Spin direction<select name="rSpin"><option value="one">All CW</option><option value="one">All CCW</option><option value="both">Half CW, half CCW</option></select></label>
      <label>Material<select name="rMat"><option value="carbon">Carbon fiber</option><option value="prepreg">Carbon prepreg</option></select></label>
      <label class="full">Mold<select name="rGeo">
       <option value="new">New mold from my file</option>
@@ -316,7 +316,7 @@ html,body{margin:0;background:#eef2f3}
     <label class="trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
    </fieldset>
    <p class="note" id="paynote"></p>
-   <div class="cta"><button class="btn pr" type="submit" id="go">Send</button><button class="btn" type="button" id="pay" hidden>Pay by card</button></div>
+   <div class="cta"><button class="btn pr" type="submit" id="go">Send for a quote</button><button class="btn" type="button" id="pay" hidden>Pay by card</button></div>
    <p class="note" id="payterms" hidden>You pay the full price shown, by card. Shipping is extra. We email that price before we ship.<br>We check every order before we start. If the price changes, you choose: pay the difference or get a full refund. Cancel any time before we start for a full refund. Paying by bank transfer or PO? Use Send.</p>
    <p class="note" id="msg" aria-live="polite"></p>
   </div>
@@ -607,7 +607,7 @@ html,body{margin:0;background:#eef2f3}
       if (!priced && n.parentNode !== ofs) ofs.appendChild(n);
       else if (priced && n.parentNode !== sfs) sfs.insertBefore(n, trap);
     });
-    el('go').textContent = mode === 'panel' ? 'Send' : 'Send for a quote';
+    el('go').textContent = 'Send for a quote';
     el('sendH').textContent = priced ? 'Send it' : 'Your details';
     el('fhint').textContent = FHINT[mode];
   }
@@ -781,7 +781,7 @@ html,body{margin:0;background:#eef2f3}
     if (s.ask || s.review) { cancel(); cur = s; return show(s); }
     if (!QUOTE_URL) { cur = { offline: true, s: s }; return show(cur); }
     var key = JSON.stringify(s.spec);
-    if (cur && cur.key === key) { if (!cur.pending) show(cur); return; }
+    if (cur && cur.key === key) { cur.s = s; if (!cur.pending) show(cur); return; }
     cancel();
     est.classList.add('busy');
     if (!cur || !cur.res) { el('tot').textContent = 'Pricing…'; }
@@ -798,10 +798,11 @@ html,body{margin:0;background:#eef2f3}
       .then(function (r) { return r.json(); })
       .then(function (r) {
         if (my !== seq) return;
+        if (cur && cur.key === key && cur.s) s = cur.s;
         if (r.error) cur = { key: key, s: s, fail: r.status === 429 ? r.error : 'We could not price this part: ' + r.error + '. Check the sizes, or press Send and we will price it by hand.' };
         else cur = { key: key, s: s, res: r, at: Date.now() };
       })
-      .catch(function () { if (my === seq) cur = { key: key, s: s, fail: "We couldn't get a price just now. Press Send and we'll email your price within 1 working day." }; })
+      .catch(function () { if (my === seq) cur = { key: key, s: (cur && cur.key === key && cur.s) || s, fail: "We couldn't get a price just now. Press Send and we'll email your price within 1 working day." }; })
       .then(function () { clearTimeout(to); if (my !== seq) return; est.classList.remove('busy'); show(cur); });
   }
 
