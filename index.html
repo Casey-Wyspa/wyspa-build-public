@@ -595,7 +595,8 @@ html,body{margin:0;background:#eef2f3}
   function coreHints() {
     var T = +(+E.pCoreT.value + 2 * +E.pSkin.value).toFixed(2);
     el('totT').textContent = 'Total thickness ' + T + ' mm (' + (T / 25.4).toFixed(2) + ' in).';
-    el('edgeH').textContent = E.pCore.value === 'WB-HC48' ? 'Honeycomb always gets the 30° ramp edge.' : EDGE_H[E.pEdge.value] || '';
+    el('edgeH').textContent = (E.pCore.value === 'WB-HC48' ? 'Honeycomb always gets the 30° ramp edge.' : EDGE_H[E.pEdge.value] || '') +
+      (E.pCore.value === 'WB-SAN130' || E.pCore.value === 'WB-SAN200' ? ' This price doesn\'t include inserts. Add how many and what size in Notes, and we\'ll price them when we confirm.' : '');
   }
   var ofs = el('of'), sfs = el('sf'), trap = sfs.querySelector('.trap');
   var FHINT = { panel: 'STEP, STL, DXF, PDF or images. Up to 10 files, 25 MB in all. Your outline DXF is sent for you.',
