@@ -159,7 +159,7 @@ html,body{margin:0;background:#eef2f3}
 <section id="make">
  <div class="sh"><div class="lb">What we make</div><div><h2>Parts we make</h2></div></div>
  <div class="caps">
-  <div class="ci"><div class="lb">Flat panel</div><h3>Cut plate and sandwich panels</h3><p>Solid carbon or fiberglass plate, or skins over a foam core. Cut to your outline, with holes and cutouts. Priced in seconds.</p><p class="spec">Up to 2390 × 1170 mm (94 × 46 in)</p></div>
+  <div class="ci"><div class="lb">Flat panel</div><h3>Cut plate and sandwich panels</h3><p>Solid carbon or fiberglass plate, or skins over a foam core. Cut to your outline, with holes and cutouts. Priced in seconds.</p><p class="spec">Up to 2390 × 1170 mm (94 × 46 in). With autoclave, up to 2390 × 1475 mm (94 × 58 in).</p></div>
   <div class="ci"><div class="lb">Molded part</div><h3>Shells, covers, fairings, fins</h3><p>We make the mold for your part. On a repeat order we reuse it.</p></div>
   <div class="ci"><div class="lb">Drone rotor</div><h3>Rotors and propellers</h3><p>Made from your rotor file, or we design the rotor for you.</p></div>
   <div class="ci"><div class="lb">Other</div><h3>Assemblies and odd shapes</h3><p>Tell us what it has to do. We work out how to make it.</p></div>
@@ -170,7 +170,7 @@ html,body{margin:0;background:#eef2f3}
  <div class="sh"><div class="lb">Materials</div><div><h2>What it's made of</h2><p>Not sure what to pick? Tell us what the part has to carry and we choose for you. Panel prices come with calculated weight and stiffness.</p></div></div>
  <ul class="pp">
   <li><b>Carbon fiber.</b> Twill weave. Stiff and light.</li>
-  <li><b>Carbon prepreg.</b> Lighter and stronger, with a cleaner finish.</li>
+  <li><b>Carbon prepreg.</b> Lighter and stronger, with a cleaner finish. Cured in an autoclave.</li>
   <li><b>Fiberglass.</b> Tough, and lets radio signals through.</li>
   <li><b>Carbon and glass.</b> Carbon stiffness with glass toughness.</li>
   <li><b>Foam core.</b> For stiff, light sandwich panels.</li>
@@ -204,8 +204,13 @@ html,body{margin:0;background:#eef2f3}
     <fieldset id="pf">
      <label class="full">DXF outline (optional)<input name="dxf" type="file" accept=".dxf"><span class="hint" id="dxfmsg">Add a DXF and we read the outline and holes. Or type the sizes below.</span><button type="button" class="link" id="nodxf" hidden>Type the sizes instead</button></label>
      <label>Length<input name="pL" value="600"><span class="hint" data-for="pL">mm or in. Up to 2390 mm.</span></label>
-     <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm.</span></label>
+     <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm (1475 mm with autoclave).</span></label>
      <label id="tL">Thickness<input name="pT" value="2"><span class="hint" data-for="pT">mm or in, total.</span></label>
+     <label>Build process<select name="pProc">
+      <option value="wet_bagged" selected>Vacuum bag (wet layup)</option>
+      <option value="infusion">Resin infusion</option>
+      <option value="prepreg">Autoclave (prepreg)</option>
+     </select><span class="hint" id="procH"></span></label>
      <label>Material<select name="pMat">
       <option value="carbon">Carbon fiber</option>
       <option value="prepreg">Carbon prepreg</option>
@@ -573,7 +578,20 @@ html,body{margin:0;background:#eef2f3}
 
   var isPanel = function () { return E.kind.value === 'Flat panel'; };
   var isCored = function () { return E.pCore.value !== 'solid'; };
-  var MAX_L = 2390, MAX_W = 1170, BIG = "Biggest part: 2390 x 1170 mm (94 x 46 in). Bigger? Press Send and we'll quote it.";
+  var MAX_L = 2390, MAX_W = 1170, MAX_W_AC = 1475, BIG = "Biggest part: 2390 x 1170 mm (94 x 46 in), or 2390 x 1475 mm (94 x 58 in) with autoclave. Bigger? Press Send and we'll quote it.";
+  var PROC_H = { wet_bagged: 'Up to 2390 x 1170 mm.', infusion: 'Up to 2390 x 1170 mm.', prepreg: 'Up to 2390 x 1475 mm.' };
+  var isAC = function () { return E.pMat.value === 'prepreg'; };
+  var procOf = function () { return isAC() ? 'prepreg' : E.pProc.value === 'prepreg' ? 'wet_bagged' : E.pProc.value; };
+  function procSync(from) {
+    if (from === 'pMat') { if (E.pMat.value === 'prepreg') E.pProc.value = 'prepreg'; else if (E.pProc.value === 'prepreg') E.pProc.value = 'wet_bagged'; }
+    else if (E.pProc.value === 'prepreg') E.pMat.value = 'prepreg';
+    else if (E.pMat.value === 'prepreg') E.pMat.value = 'carbon';
+    var ac = E.pProc.value === 'prepreg';
+    Array.prototype.forEach.call(E.pMat.options, function (o) { o.hidden = ac ? o.value !== 'prepreg' : o.value === 'prepreg'; });
+    el('procH').textContent = PROC_H[E.pProc.value] || '';
+    var wh = document.querySelector('[data-for=pW]');
+    if (wh) wh.dataset.t = 'mm or in. Up to ' + (ac ? MAX_W_AC : MAX_W) + ' mm.';
+  }
   var EDGE_H = { trimmed: 'Cut square. We seal the core at the edge.', ramp30: 'The core tapers at 30° so the skins meet in a solid edge. Good for bolts near the edge.',
     edge_band: 'A 25 mm strip of dense foam along the edge, full thickness. Good for bolts near the edge.' };
   var userEdge = 'trimmed', optsAsked = false;
@@ -699,8 +717,8 @@ html,body{margin:0;background:#eef2f3}
     }
     var L = geo ? Math.round(geo.L) : S.pL.v, W = geo ? Math.round(geo.W) : S.pW.v, holes = Math.max(0, Math.round(+E.pHoles.value || 0));
     if (W > L) { var sw = L; L = W; W = sw; }
-    if (L > MAX_L || W > MAX_W) return { review: BIG };
-    var spec = { units: 'mm', outline: { bbox: [L, W] }, finish: E.pFin.value, qty: q,
+    if (L > MAX_L || W > (isAC() ? MAX_W_AC : MAX_W)) return { review: BIG };
+    var spec = { units: 'mm', outline: { bbox: [L, W] }, process: procOf(), finish: E.pFin.value, qty: q,
       laminate: cored ? { family: E.pMat.value, type: 'sandwich', thickness: S.pT.v, skin: skin, core: { material_id: E.pCore.value } } : { family: E.pMat.value, thickness: S.pT.v } };
     if (cored) spec.edge = E.pEdge.value;
     if (geo) {
@@ -711,7 +729,7 @@ html,body{margin:0;background:#eef2f3}
       if (geo.holes && geo.holeArea != null) spec.cutouts.total_area = geo.holeArea;
     } else if (holes) spec.cutouts = { count: holes };
     var mat = E.pMat.options[E.pMat.selectedIndex].text, fin = E.pFin.options[E.pFin.selectedIndex].text;
-    var desc = 'Flat panel ' + L + ' × ' + W + ' × ' + S.pT.v + ' mm, ' + mat + ', ' + (cored ? 'core ' + E.pCore.options[E.pCore.selectedIndex].text + ', ' + coreT + ' mm thick, with ' + skin + ' mm skins each side, edges: ' + E.pEdge.options[E.pEdge.selectedIndex].text.toLowerCase() : 'solid') + ', ' + fin + ', ' +
+    var desc = 'Flat panel ' + L + ' × ' + W + ' × ' + S.pT.v + ' mm, ' + mat + ', ' + E.pProc.options[E.pProc.selectedIndex].text + ', ' + (cored ? 'core ' + E.pCore.options[E.pCore.selectedIndex].text + ', ' + coreT + ' mm thick, with ' + skin + ' mm skins each side, edges: ' + E.pEdge.options[E.pEdge.selectedIndex].text.toLowerCase() : 'solid') + ', ' + fin + ', ' +
       holeTxt(geo ? geo.holes : holes, geo ? geo.round : 0) + (geo ? ', outline from ' + geoFile.name + ' (' + (geo.cut / 1000).toFixed(2) + ' m of cutting)' : '') + '. Quantity ' + q + '.';
     return { spec: spec, desc: desc, q: q };
   }
@@ -943,11 +961,12 @@ html,body{margin:0;background:#eef2f3}
   f.addEventListener('submit', function (ev) { ev.preventDefault(); send(false); });
   el('pay').addEventListener('click', function () { if (payOK().ok) send(true); });
   f.addEventListener('input', function (ev) { if (ev.target.name === 'files') checkFiles(); if (['name', 'email', 'org', 'notes', 'files', 'website'].indexOf(ev.target.name) < 0) update(); else payState(); });
-  f.addEventListener('change', function (ev) { if (ev.target.name === 'dxf') return; if (ev.target.name === 'pEdge' && !E.pEdge.disabled) userEdge = E.pEdge.value; if (ev.target.name === 'files') { checkFiles(); payState(); } else update(); });
+  f.addEventListener('change', function (ev) { if (ev.target.name === 'dxf') return; if (ev.target.name === 'pProc' || ev.target.name === 'pMat') procSync(ev.target.name); if (ev.target.name === 'pEdge' && !E.pEdge.disabled) userEdge = E.pEdge.value; if (ev.target.name === 'files') { checkFiles(); payState(); } else update(); });
   el('again').addEventListener('click', function () {
     f.reset(); geo = null; geoFile = null; lockSizes(false); dxfMsg.textContent = DXF_HINT; ref = newRef(); cur = null;
     msg.textContent = ''; el('ferr').textContent = ''; el('done').hidden = true; f.hidden = false; update(); E.name.focus();
   });
+  procSync('pMat');
   update();
 })();
 </script>
