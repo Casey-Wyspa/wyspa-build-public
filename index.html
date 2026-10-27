@@ -174,14 +174,15 @@ html,body{margin:0;background:#eef2f3}
   <li><b>Fiberglass.</b> Tough, and lets radio signals through.</li>
   <li><b>Carbon and glass.</b> Carbon stiffness with glass toughness.</li>
   <li><b>Foam core.</b> For stiff, light sandwich panels.</li>
-  <li><b>Finish.</b> Matte, gloss on one side, or clear coat.</li>
+  <li><b>Finish.</b> Gloss on the mold side, peel-ply texture on the other side.</li>
+  <li><b>Holes and edges.</b> Cut to ±0.5 mm. Smallest hole: 7.5 mm across.</li>
  </ul>
 </section>
 
 <section id="how">
  <div class="sh"><div class="lb">How it works</div><div><h2>Three steps</h2></div></div>
  <ol class="steps">
-  <li><h3>Get a price</h3><p>Flat panels: type the size or add a DXF to see the price. Drone rotors: pick the size to see an estimate. Molded parts: type the size to see an estimate. Other parts: send the details and we'll email a price within 1 working day. Orders start at $3,000.</p></li>
+  <li><h3>Get a price</h3><p>Flat panels: type the size or add a DXF to see the price. Drone rotors: pick the size to see an estimate. Molded parts: type the size to see an estimate. Other parts: send the details and we'll email a price within 1 working day. Orders start at $2,400 for flat panels and $3,600 for rotors and molded parts.</p></li>
   <li><h3>Order it</h3><p>Pay by card, or press Send for a quote and we'll email a firm price. Paying by bank transfer or PO? Send for a quote.</p></li>
   <li><h3>We make it</h3><p>We check every order before we start. Then we make and ship your parts.</p></li>
  </ol>
@@ -244,11 +245,6 @@ html,body{margin:0;background:#eef2f3}
       <option value="ramp30">30° ramp to a solid edge</option>
       <option value="edge_band">Solid edge band</option>
      </select><span class="hint" id="edgeH"></span></label>
-     <label>Finish<select name="pFin">
-      <option value="matte">Matte</option>
-      <option value="gloss">Gloss one side</option>
-      <option value="clear">Clear coat</option>
-     </select></label>
      <label>Holes and cutouts per panel<input name="pHoles" type="number" min="0" step="1" value="0"></label>
     </fieldset>
     <fieldset id="of" hidden>
@@ -718,7 +714,7 @@ html,body{margin:0;background:#eef2f3}
     var L = geo ? Math.round(geo.L) : S.pL.v, W = geo ? Math.round(geo.W) : S.pW.v, holes = Math.max(0, Math.round(+E.pHoles.value || 0));
     if (W > L) { var sw = L; L = W; W = sw; }
     if (L > MAX_L || W > (isAC() ? MAX_W_AC : MAX_W)) return { review: BIG };
-    var spec = { units: 'mm', outline: { bbox: [L, W] }, process: procOf(), finish: E.pFin.value, qty: q,
+    var spec = { units: 'mm', outline: { bbox: [L, W] }, process: procOf(), finish: 'standard', qty: q,
       laminate: cored ? { family: E.pMat.value, type: 'sandwich', thickness: S.pT.v, skin: skin, core: { material_id: E.pCore.value } } : { family: E.pMat.value, thickness: S.pT.v } };
     if (cored) spec.edge = E.pEdge.value;
     if (geo) {
@@ -728,7 +724,7 @@ html,body{margin:0;background:#eef2f3}
       if (geo.holes) spec.cutouts = { count: geo.holes, total_perimeter: hp, round_count: geo.round };
       if (geo.holes && geo.holeArea != null) spec.cutouts.total_area = geo.holeArea;
     } else if (holes) spec.cutouts = { count: holes };
-    var mat = E.pMat.options[E.pMat.selectedIndex].text, fin = E.pFin.options[E.pFin.selectedIndex].text;
+    var mat = E.pMat.options[E.pMat.selectedIndex].text, fin = 'standard finish';
     var desc = 'Flat panel ' + L + ' × ' + W + ' × ' + S.pT.v + ' mm, ' + mat + ', ' + E.pProc.options[E.pProc.selectedIndex].text + ', ' + (cored ? 'core ' + E.pCore.options[E.pCore.selectedIndex].text + ', ' + coreT + ' mm thick, with ' + skin + ' mm skins each side, edges: ' + E.pEdge.options[E.pEdge.selectedIndex].text.toLowerCase() : 'solid') + ', ' + fin + ', ' +
       holeTxt(geo ? geo.holes : holes, geo ? geo.round : 0) + (geo ? ', outline from ' + geoFile.name + ' (' + (geo.cut / 1000).toFixed(2) + ' m of cutting)' : '') + '. Quantity ' + q + '.';
     return { spec: spec, desc: desc, q: q };
