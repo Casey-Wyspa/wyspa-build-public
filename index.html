@@ -204,7 +204,7 @@ html,body{margin:0;background:#eef2f3}
 <section id="make">
  <div class="sh"><div class="lb">What we make</div><div><h2>Parts we make</h2></div></div>
  <div class="caps">
-  <div class="ci"><div class="lb">Flat panels</div><h3>Plate and sandwich panels</h3><p>Solid carbon or fiberglass plate, or skins over a foam core. Cut to your outline, with holes, core inserts and ramped edges. <a href="#panel">Get a price now.</a></p><p class="spec">Up to 2390 × 1170 mm (94 × 46 in), or 2390 × 1475 mm (94 × 58 in) with autoclave. Orders from $2,400.</p></div>
+  <div class="ci"><div class="lb">Flat panels</div><h3>Plate and sandwich panels</h3><p>Solid carbon or fiberglass plate, or skins over a foam core. Cut to your outline, with holes, core inserts and ramped edges. <a href="#panel">Get a price now.</a></p><p class="spec">Up to 2390 × 1170 mm (94 × 46 in). Orders from $2,400.</p></div>
   <div class="ci"><div class="lb">Drone rotors and props</div><h3>Rotors and propellers</h3><p>Made from your rotor file, or we design the rotor for you. Tell us the diameter, the motor and the thrust you need.</p><p class="spec">Rotor orders from $3,600.</p></div>
   <div class="ci"><div class="lb">Molded parts</div><h3>Shells, covers, fairings, fins</h3><p>We make the mold for your part. On a repeat order we reuse it.</p><p class="spec">Orders from $3,600.</p></div>
  </div>
@@ -219,7 +219,7 @@ html,body{margin:0;background:#eef2f3}
     <fieldset id="pf">
      <label class="full">DXF outline (optional)<input name="dxf" type="file" accept=".dxf"><span class="hint" id="dxfmsg">Add a DXF and we read the outline and holes. Or type the sizes below.</span><button type="button" class="link" id="nodxf" hidden>Type the sizes instead</button></label>
      <label>Length<input name="pL" value="600"><span class="hint" data-for="pL">mm or in. Up to 2390 mm.</span></label>
-     <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm (1475 mm with autoclave).</span></label>
+     <label>Width<input name="pW" value="400"><span class="hint" data-for="pW">mm or in. Up to 1170 mm.</span></label>
      <label>Material<select name="pMat">
       <option value="carbon">Carbon fiber</option>
       <option value="prepreg">Carbon prepreg</option>
@@ -632,8 +632,8 @@ html,body{margin:0;background:#eef2f3}
   el('nodxf').addEventListener('click', function () { geo = null; geoFile = null; E.dxf.value = ''; lockSizes(false); dxfMsg.textContent = DXF_HINT; update(); });
 
   var isCored = function () { return E.pCore.value !== 'solid'; };
-  var MAX_L = 2390, MAX_W = 1170, MAX_W_AC = 1475, BIG = "Biggest part: 2390 x 1170 mm (94 x 46 in), or 2390 x 1475 mm (94 x 58 in) with autoclave. Bigger? Press Send and we'll quote it.";
-  var PROC_H = { wet_bagged: 'Up to 2390 x 1170 mm.', infusion: 'Up to 2390 x 1170 mm.', prepreg: 'Up to 2390 x 1475 mm.' };
+  var MAX_L = 2390, MAX_W = 1170, MAX_W_AC = 1170, BIG = "Biggest part: 2390 x 1170 mm (94 x 46 in). Bigger? Press Send and we'll quote it.";
+  var PROC_H = { wet_bagged: 'Up to 2390 x 1170 mm.', infusion: 'Up to 2390 x 1170 mm.', prepreg: 'Up to 2390 x 1170 mm.' };
   var isAC = function () { return E.pMat.value === 'prepreg'; };
   var procOf = function () { return isAC() ? 'prepreg' : E.pProc.value === 'prepreg' ? 'wet_bagged' : E.pProc.value; };
   function procSync(from) {
